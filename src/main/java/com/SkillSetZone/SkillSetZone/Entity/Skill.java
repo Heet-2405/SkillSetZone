@@ -5,10 +5,32 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "skills")
 public class Skill {
+
     @Id
     private String id;
     private String title;
     private String description;
+
+
+    @Override
+    public String toString() {
+        return "Skill{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", likes=" + likes +
+                '}';
+    }
+    public Skill(){}
+    public Skill(String id, String title, String description, String imageUrl, int likes) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.likes = likes;
+    }
+
     private String imageUrl; // Path or URL to the uploaded image
     private int likes;
 

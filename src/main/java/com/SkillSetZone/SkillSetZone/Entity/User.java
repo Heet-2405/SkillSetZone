@@ -8,6 +8,8 @@ import java.util.List;
 
 @Document(collection = "users")
 public class User {
+
+
     @Id
     private String id;
     private String name;
@@ -17,7 +19,15 @@ public class User {
 
     @DBRef
     private List<Skill> skills; // Reference to skills
-
+    public User(){}
+    public User(String id, String name, String email, String password, String collegeBranch, List<Skill> skills) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.collegeBranch = collegeBranch;
+        this.skills = skills;
+    }
     // Getters and Setters
     public String getId() {
         return id;
