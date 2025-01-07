@@ -1,6 +1,5 @@
 package com.SkillSetZone.SkillSetZone.Entity;
 
-import jakarta.annotation.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,16 +10,15 @@ public class Skill {
     private String id;
     private String title;
     private String description;
-    @Nullable
-    private String imageUrl; // Path or URL to the uploaded image
+    private byte[] image; // Binary data for the image
     private int likes;
     private String userId;
 
-    public Skill(String id, String title, String description, @Nullable String imageUrl, int likes, String userId) {
+    public Skill(String id, String title, String description, byte[] image, int likes, String userId) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.likes = likes;
         this.userId = userId;
     }
@@ -52,13 +50,12 @@ public class Skill {
         this.description = description;
     }
 
-    @Nullable
-    public String getImageUrl() {
-        return imageUrl;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setImageUrl(@Nullable String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public int getLikes() {
@@ -83,10 +80,8 @@ public class Skill {
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
                 ", likes=" + likes +
                 ", userId='" + userId + '\'' +
                 '}';
     }
 }
-
