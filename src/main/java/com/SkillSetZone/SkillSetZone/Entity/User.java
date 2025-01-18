@@ -10,11 +10,9 @@ import java.util.List;
 
 @Document(collection = "users")
 public class User {
-
-
     @Id
     private String id;
-//    @Indexed(unique = true)
+
     private String name;
     private String email;
     private String password;
@@ -78,6 +76,18 @@ public class User {
 
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", collegeBranch='" + collegeBranch + '\'' +
+                ", skills=" + skills +
+                '}';
     }
 }
 
