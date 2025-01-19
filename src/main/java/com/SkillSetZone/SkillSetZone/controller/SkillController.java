@@ -22,37 +22,34 @@ public class SkillController {
     }
 
     // SKILL CREATION
-    @PostMapping("/{userId}/create")
+    @PostMapping("/create")
     public Skill createSkill(
-            @PathVariable String userId,
             @RequestPart(value = "file", required = false) MultipartFile image,
             @RequestParam("title") String title,
             @RequestParam("description") String description) throws IOException {
 
-        if (image == null || image.isEmpty()) {
-            return skillService.addSkill(title, description, null, 0, userId); // Pass null for image if no file is uploaded
-        }
-        return skillService.addSkill(title, description, image, 0, userId);
+        // The userId is now implicitly handled by the service through authenticated user
+        return skillService.addSkill(title, description, image, 0);
     }
 
-
     // UPDATE SKILL BY SKILL ID
-    @PutMapping("/{userId}/update/{skillId}")
+    @PutMapping("/update/{skillId}")
     public Skill updateSkill(
-            @PathVariable String userId,
             @PathVariable String skillId,
             @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam(value = "likes", required = false, defaultValue = "0") int likes) throws IOException {
 
-        return skillService.updateSkill(skillId, title, description, file, likes, userId);
+        // The userId is now implicitly handled by the service through authenticated user
+        return skillService.updateSkill(skillId, title, description, file, likes);
     }
 
     // DELETE SKILL BY ID
-    @DeleteMapping("/{userId}/delete/{skillId}")
-    public String deleteSkill(@PathVariable String userId, @PathVariable String skillId) {
-        skillService.deleteSkill(skillId,userId);
+    @DeleteMapping("/delete/{skillId}")
+    public String deleteSkill(@PathVariable String skillId) {
+        // The userId is now implicitly handled by the service through authenticated user
+        skillService.deleteSkill(skillId);
         return "Skill with ID " + skillId + " has been deleted.";
     }
 
@@ -62,9 +59,10 @@ public class SkillController {
         return skillService.getSkillById(id);
     }
 
-    // GETTING ALL THE SKILLS OF A USER
-    @GetMapping("/{userId}/all")
-    public List<Skill> getAllSkillsByUser(@PathVariable String userId) {
-        return (List<Skill>) skillService.getAllSkills(); // Modify as needed if user-specific logic is required
+    // GETTING ALL THE SKILLS OF THE AUTHENTICATED USER
+    @GetMapping("/all")
+    public List<Skill> getAllSkills() {
+        // This method now fetches the skills of the authenticated user
+        return (List<Skill>) skillService.getAllSkills();
     }
 }

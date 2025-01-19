@@ -1,7 +1,6 @@
 package com.SkillSetZone.SkillSetZone.Entity;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,26 +10,28 @@ import java.util.List;
 @Document(collection = "users")
 public class User {
 
-
     @Id
     private String id;
-//    @Indexed(unique = true)
     private String name;
     private String email;
     private String password;
     private String collegeBranch;
 
     @DBRef
-    private List<Skill> skills = new ArrayList<>(); // Reference to skills
-    public User(){}
+    private List<Skill> skills = new ArrayList<>(); // Optional field, it can be an empty list
+
+    // Constructors, getters, and setters
+    public User() {}
+
     public User(String id, String name, String email, String password, String collegeBranch, List<Skill> skills) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.collegeBranch = collegeBranch;
-        this.skills = skills;
+        this.skills = skills == null ? new ArrayList<>() : skills; // Default to empty list if null
     }
+
     // Getters and Setters
     public String getId() {
         return id;
@@ -79,5 +80,16 @@ public class User {
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
     }
-}
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", collegeBranch='" + collegeBranch + '\'' +
+                ", skills=" + skills +
+                '}';
+    }
+}
