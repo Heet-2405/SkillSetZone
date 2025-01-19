@@ -11,16 +11,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('Attempting to login with:', { email, password }); // Debug log
+      console.log('Attempting to login with:', { email, password });
       const response = await login(email, password);
       console.log('Login response:', response);
-      navigate('/dashboard'); // Adjust based on your routing
+      if (response) {
+        navigate('/dashboard'); // Ensure this path matches your routing configuration
+      }
     } catch (err) {
       console.error('Login failed:', err);
-      setError(err?.message || 'An error occurred');
+      setError(err?.response?.data?.message || 'Invalid credentials. Please try again.');
     }
   };
-  
 
   return (
     <div>
@@ -31,6 +32,7 @@ const Login = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
             required
           />
         </div>
@@ -40,6 +42,7 @@ const Login = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
             required
           />
         </div>
@@ -51,3 +54,4 @@ const Login = () => {
 };
 
 export default Login;
+

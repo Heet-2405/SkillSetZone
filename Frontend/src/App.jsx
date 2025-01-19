@@ -28,7 +28,6 @@ const App = () => {
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Login />} />
-
             {/* Protect the /dashboard route */}
             <Route
               path="/dashboard"
@@ -47,3 +46,8 @@ const App = () => {
 };
 
 export default App;
+
+
+
+
+

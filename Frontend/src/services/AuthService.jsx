@@ -3,15 +3,6 @@ import axios from 'axios';
 // Define the base URL for your backend
 const API_BASE_URL = 'http://localhost:8080/public';
 
-// Helper function to encode base64
-const toBase64 = (str) => {
-  if (typeof window !== 'undefined') {
-    return btoa(str); // Browser environment
-  } else {
-    return Buffer.from(str).toString('base64'); // Node.js environment
-  }
-};
-
 // Signup service
 export const signup = async (userData) => {
   try {
@@ -22,23 +13,23 @@ export const signup = async (userData) => {
   }
 };
 
-// Login service
 export const login = async (email, password) => {
   try {
-    const authHeader = 'Basic ' + toBase64(`${email}:${password}`);
-
+    // Sending email and password in the request body
     const response = await axios.post(
-      `${API_BASE_URL}/login`, // Backend login URL
-      {}, // Empty body for Basic Auth
-      {
-        headers: {
-          Authorization: authHeader, // Set the Authorization header
-          'Content-Type': 'application/json', // Ensure proper content-type
-        },
-      }
+      `${API_BASE_URL}/login`, 
+      { email, password },
+      { headers: { 'Content-Type': 'application/json' } }
     );
 
     console.log('Login successful:', response.data);
+
+    // Assuming the token is in response.data.token
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token); // Store token in localStorage
+      console.log('Token saved to localStorage:', response.data.token); // Debug log
+    }
+
     return response.data;
   } catch (error) {
     console.error('Error message:', error.message);
@@ -59,3 +50,7 @@ export const login = async (email, password) => {
     throw error;
   }
 };
+
+
+
+
