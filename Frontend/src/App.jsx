@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Signup from './components/Signup.jsx';
@@ -6,7 +5,7 @@ import Login from './components/Login.jsx';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import Dashboard from './components/Dashboard.jsx';
-import ProtectedRoute from './components/ProtectedRoute.jsx'; // Import the ProtectedRoute component
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 const App = () => {
   const layoutStyles = {
@@ -28,7 +27,6 @@ const App = () => {
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Login />} />
-            {/* Protect the /dashboard route */}
             <Route
               path="/dashboard"
               element={
@@ -46,8 +44,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
-
