@@ -28,7 +28,7 @@ public class UserController {
     // GET USER BY ID
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable String id) {
-        return userService.getUserById(id);
+        return Optional.ofNullable(userService.getUserById(id));
     }
 
     // LOGOUT endpoint (handled by Spring Security)
