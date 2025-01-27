@@ -6,7 +6,7 @@ import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-
+import Skill from './components/Skill.jsx';
 const App = () => {
   const layoutStyles = {
     minHeight: '100vh',
@@ -32,6 +32,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/skills"
+              element={
+                <ProtectedRoute>
+                  <Skill />
                 </ProtectedRoute>
               }
             />

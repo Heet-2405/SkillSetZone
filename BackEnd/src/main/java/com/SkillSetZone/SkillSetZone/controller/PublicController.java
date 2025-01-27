@@ -5,9 +5,6 @@ import com.SkillSetZone.SkillSetZone.Entity.User;
 import com.SkillSetZone.SkillSetZone.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,31 +13,31 @@ import org.springframework.web.bind.annotation.*;
 public class PublicController {
 
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public PublicController(UserService userService, AuthenticationManager authenticationManager) {
+    public PublicController(UserService userService) {
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
     }
 
+    // Signup endpoint
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody User user) {
-        if (userService.isEmailAlreadyInUse(user.getEmail())) {
-            return ResponseEntity.badRequest().body("Email is already in use.");
+        try {
+            User newUser = userService.createUser(user);
+            return ResponseEntity.ok(newUser);
+        } catch (EmailAlreadyInUseException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        User newUser = userService.createUser(user);
-        return ResponseEntity.ok(newUser);
     }
 
+    // Login endpoint
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-        return ResponseEntity.ok("Login successful!");
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            User user = userService.authenticateUser(loginRequest);
+            return ResponseEntity.ok("Login successful for user: " + user.getName());
+        } catch (AuthenticationFailedException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 }

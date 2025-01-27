@@ -12,15 +12,15 @@ public class Skill {
     private String description;
     private byte[] image; // Binary data for the image
     private int likes;
-    private String userId;
+    private String email;
 
-    public Skill(String id, String title, String description, byte[] image, int likes, String userId) {
+    public Skill(String id, String title, String description, byte[] image, int likes, String email) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.image = image;
         this.likes = likes;
-        this.userId = userId;
+        this.email = email;
     }
 
     public Skill() {
@@ -66,12 +66,12 @@ public class Skill {
         this.likes = likes;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setEmail(String userId) {
+        this.email = userId;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class Skill {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", likes=" + likes +
-                ", userId='" + userId + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }
