@@ -14,6 +14,7 @@ public class Skill {
     private int likes;
     private String email;
 
+
     public Skill(String id, String title, String description, byte[] image, int likes, String email) {
         this.id = id;
         this.title = title;
@@ -84,4 +85,6 @@ public class Skill {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+
 }

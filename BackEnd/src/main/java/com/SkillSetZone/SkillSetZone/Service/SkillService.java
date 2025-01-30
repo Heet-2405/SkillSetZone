@@ -11,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class SkillService {
@@ -89,4 +88,29 @@ public class SkillService {
             throw new IllegalArgumentException("Skill not found.");
         }
     }
+    public List<Map<String, Object>> getAllSkills() {
+        List<Skill> skills = skillRepository.findAll();
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (Skill skill : skills) {
+            Optional<User> user = userRepository.findByEmail(skill.getEmail()); // Fetch user by email
+            String username = (user.isPresent()) ? user.get().getName() : "Unknown"; // Get username
+
+            Map<String, Object> skillData = new HashMap<>();
+            skillData.put("id", skill.getId());
+            skillData.put("title", skill.getTitle());
+            skillData.put("description", skill.getDescription());
+            skillData.put("likes", skill.getLikes());
+            skillData.put("username", username); // Replace email with username
+            skillData.put("image", skill.getImage()); // Ensure image is handled properly
+
+            response.add(skillData);
+        }
+
+        return response;
+    }
+
+
+
+
 }

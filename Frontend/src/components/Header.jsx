@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState(''); // State to track search input
 
   // Pages where specific elements should be hidden (e.g., Signup and Login pages)
   const hideElements = location.pathname === '/signup' || location.pathname === '/';
@@ -17,6 +18,15 @@ const Header = () => {
     localStorage.removeItem('auth');
     // Redirect to login page
     navigate('/');
+  };
+
+  // Handle search button click
+  const handleSearch = () => {
+    if (searchQuery) {
+      console.log(`Searching for: ${searchQuery}`);
+      // Redirect to search results page or perform search logic
+      navigate(`/search?query=${searchQuery}`);
+    }
   };
 
   const headerStyles = {
@@ -93,7 +103,7 @@ const Header = () => {
   return (
     <header style={headerStyles}>
       <div style={logoContainerStyles}>
-        <div style={logoStyles}>SkillSetZone</div>
+        <div style={logoStyles} onClick={() => navigate('/')}>SkillSetZone</div>
       </div>
       
       {!hideElements && (
@@ -102,7 +112,17 @@ const Header = () => {
             type="text"
             placeholder="Search..."
             style={searchInputStyles}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} // Update search query state
           />
+          <button
+            style={buttonStyles}
+            onMouseEnter={handleButtonHover}
+            onMouseLeave={handleButtonLeave}
+            onClick={handleSearch} // Trigger search
+          >
+            Search
+          </button>
         </div>
       )}
       
@@ -125,6 +145,14 @@ const Header = () => {
                 onClick={() => navigate('/skills')} // Navigate to Skills page
               >
                 Skills
+              </button>
+              <button
+                style={buttonStyles}
+                onMouseEnter={handleButtonHover}
+                onMouseLeave={handleButtonLeave}
+                onClick={() => navigate('/dashboard')} // Navigate to Dashboard page
+              >
+                Dashboard
               </button>
               <button
                 style={buttonStyles}
