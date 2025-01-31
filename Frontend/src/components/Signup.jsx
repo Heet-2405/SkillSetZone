@@ -16,7 +16,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       await signup(formData);
-      navigate('/dashboard'); // Redirect to dashboard on successful signup
+      navigate('/'); // Redirect to dashboard on successful signup
     } catch (error) {
       setMessage(error.message || 'Signup failed. Please try again.');
     }

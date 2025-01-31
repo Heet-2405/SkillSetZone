@@ -2,6 +2,7 @@ package com.SkillSetZone.SkillSetZone.Service;
 
 import com.SkillSetZone.SkillSetZone.Entity.Skill;
 import com.SkillSetZone.SkillSetZone.Entity.User;
+import com.SkillSetZone.SkillSetZone.Entity.UserLikesSkill;
 import com.SkillSetZone.SkillSetZone.Repo.SkillRepository;
 import com.SkillSetZone.SkillSetZone.Repo.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.SkillSetZone.SkillSetZone.Repo.UserLikesSkillRepository;
 import java.io.IOException;
 import java.util.*;
 
@@ -18,10 +19,11 @@ public class SkillService {
 
     private final SkillRepository skillRepository;
     private final UserRepository userRepository;
-
-    public SkillService(SkillRepository skillRepository, UserRepository userRepository) {
+    private final UserLikesSkillRepository userLikesSkillRepository;
+    public SkillService(SkillRepository skillRepository, UserRepository userRepository, UserLikesSkillRepository userLikesSkillRepository) {
         this.skillRepository = skillRepository;
         this.userRepository = userRepository;
+        this.userLikesSkillRepository = userLikesSkillRepository;
     }
 
     private String getAuthenticatedEmail() {
@@ -110,7 +112,32 @@ public class SkillService {
         return response;
     }
 
+    @Transactional
+    public Map<String, Object> toggleLikeStatus(String skillId, String email) {
+        Optional<Skill> skillOptional = skillRepository.findById(skillId);
+        if (!skillOptional.isPresent()) {
+            throw new RuntimeException("Skill not found");
+        }
 
+        Skill skill = skillOptional.get();
+        Optional<UserLikesSkill> userLike = userLikesSkillRepository.findByUserEmailAndSkillId(email, skillId);
 
+        Map<String, Object> response = new HashMap<>();
+        if (userLike.isPresent()) {
+            // User has already liked, so decrease like count and remove the like entry
+            skill.setLikes(skill.getLikes() - 1);
+            userLikesSkillRepository.delete(userLike.get());
+            response.put("hasLiked", false);
+        } else {
+            // User has not liked yet, so increase like count and save the like entry
+            skill.setLikes(skill.getLikes() + 1);
+            userLikesSkillRepository.save(new UserLikesSkill(email, skillId));
+            response.put("hasLiked", true);
+        }
+
+        skillRepository.save(skill);
+        response.put("likes", skill.getLikes());
+        return response;
+    }
 
 }

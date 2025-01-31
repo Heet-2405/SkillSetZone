@@ -11,9 +11,10 @@ const Skill = () => {
   const authToken = localStorage.getItem("auth"); // Retrieve auth from local storage
   const navigate = useNavigate(); // Replace useHistory with useNavigate
 
+  // Fetch skills from the server
   const fetchSkills = async () => {
     const headers = {
-      Authorization: `Basic ${authToken}`,  // Pass the token in the format expected by the server
+      Authorization: `Basic ${authToken}`, // Pass the token in the format expected by the server
     };
 
     try {
@@ -30,7 +31,6 @@ const Skill = () => {
       setSkills(data);
     } catch (error) {
       console.error("Error fetching skills:", error);
-      // Optional: Redirect to login if the token is not valid
       if (error.message.includes("401")) {
         navigate("/login"); // Redirect to login page if unauthorized
       }
@@ -45,6 +45,7 @@ const Skill = () => {
     }
   }, [authToken, navigate]);
 
+  // Create or update skill
   const handleCreateOrUpdateSkill = async (e) => {
     e.preventDefault();
 
@@ -60,7 +61,6 @@ const Skill = () => {
     try {
       if (editingSkillId) {
         // Update existing skill
-        formData.append("likes", 0); // Adjust likes as needed
         const response = await fetch(
           `http://localhost:8080/api/skills/update/${editingSkillId}`,
           {
@@ -94,6 +94,7 @@ const Skill = () => {
     }
   };
 
+  // Delete a skill
   const handleDeleteSkill = async (id) => {
     const headers = {
       Authorization: `Basic ${authToken}`,
@@ -118,6 +119,7 @@ const Skill = () => {
     }
   };
 
+  // Edit skill
   const handleEditSkill = (skill) => {
     setEditingSkillId(skill.id);
     setTitle(skill.title);
@@ -175,12 +177,8 @@ const Skill = () => {
             <p>{skill.description}</p>
             {skill.image && (
               <img
-                src={`data:image/jpeg;base64,${btoa(
-                  new Uint8Array(skill.image).reduce(
-                    (data, byte) => data + String.fromCharCode(byte),
-                    ""
-                  )
-                )}`}
+                // If the image is already Base64, directly use it
+                src={`data:image/jpeg;base64,${skill.image}`}
                 alt="Skill"
                 className="mt-2 w-32 h-32 object-cover"
               />

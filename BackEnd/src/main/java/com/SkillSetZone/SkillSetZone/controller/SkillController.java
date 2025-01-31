@@ -67,6 +67,24 @@ public class SkillController {
     public List<Map<String, Object>> getAllSkills() {
         return skillService.getAllSkills();
     }
+    @PutMapping("/like/{id}")
+    public Map<String, Object> toggleLike(@PathVariable String id, @RequestHeader("Authorization") String authorizationHeader) {
+        // Extract user email from the authorization header (or use a service to get the authenticated user's email)
+        String userEmail = extractUserEmailFromAuthHeader(authorizationHeader);
+
+        return skillService.toggleLikeStatus(id, userEmail);
+    }
+
+    private String extractUserEmailFromAuthHeader(String authorizationHeader) {
+        // This function should decode the Basic Auth header and extract the email from it.
+        // The `Authorization` header contains a base64 encoded string "username:password"
+        // You can parse and decode the email from it.
+
+        // Example: "Basic base64encode(username:password)"
+        String base64Credentials = authorizationHeader.substring("Basic ".length());
+        String credentials = new String(java.util.Base64.getDecoder().decode(base64Credentials));
+        return credentials.split(":")[0]; // Assume email is the username
+    }
 
 
 
