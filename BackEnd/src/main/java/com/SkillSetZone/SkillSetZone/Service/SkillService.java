@@ -14,6 +14,8 @@ import com.SkillSetZone.SkillSetZone.Repo.UserLikesSkillRepository;
 import java.io.IOException;
 import java.util.*;
 
+
+
 @Service
 public class SkillService {
 
@@ -139,5 +141,18 @@ public class SkillService {
         response.put("likes", skill.getLikes());
         return response;
     }
+
+    public List<Skill> getSearchedSkills(String skillTitle) {
+        if (skillTitle == null || skillTitle.trim().isEmpty()) {
+
+            return new ArrayList<>();
+        }
+
+        return skillRepository.findByTitle(skillTitle);
+    }
+
+
+
+
 
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
-
+import '/src/css/Skill.css';
 const Skill = () => {
   const [skills, setSkills] = useState([]);
   const [title, setTitle] = useState("");

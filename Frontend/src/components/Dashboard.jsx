@@ -1,5 +1,7 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import '/src/css/Dashboard.css';  // Ensure the path is correct based on your file structure
 
 const Dashboard = () => {
   const [skills, setSkills] = useState([]);
@@ -20,13 +22,18 @@ const Dashboard = () => {
 
       const data = await response.json();
 
-      const skillsWithImages = data.map((skill) => ({
+      // Extract the timestamp from the ObjectId for sorting (timestamp is embedded in the first 4 bytes of the ObjectId)
+      const skillsWithTimestamp = data.map((skill) => ({
         ...skill,
         imageSrc: skill.image ? `data:image/jpeg;base64,${skill.image}` : null,
-        hasLiked: skill.hasLiked || false, // Use the hasLiked flag from the server
+        hasLiked: skill.hasLiked || false,
+        createdAt: new Date(skill.id.toString().substring(0, 8) * 1000), // Extract the timestamp from ObjectId
       }));
 
-      setSkills(skillsWithImages);
+      // Sort by the extracted timestamp (newest first)
+      const sortedSkills = skillsWithTimestamp.sort((a, b) => b.createdAt - a.createdAt);
+
+      setSkills(sortedSkills);
     } catch (error) {
       console.error("Error fetching skills:", error);
       if (error.message.includes("401")) {
@@ -78,7 +85,6 @@ const Dashboard = () => {
       );
     }
   };
-  
 
   useEffect(() => {
     if (!authToken) {
@@ -89,18 +95,22 @@ const Dashboard = () => {
   }, [authToken, navigate, fetchSkills]);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className="dashboard-container">
+      <h1 className="dashboard-header">Dashboard</h1>
       <div>
         {skills.map((skill) => (
-          <div key={skill.id}>
-            <p>Posted by: {skill.username}</p>
+          <div key={skill.id} className="skill-card">
+            <h2>{skill.username}</h2>
+            <p>{skill.email}</p>
             <h3>{skill.title}</h3>
             <p>{skill.description}</p>
-            <img src={skill.imageSrc} alt="" />
-            <p>Likes: {skill.likes}</p>
-            <button onClick={() => toggleLike(skill.id)}>Like</button>
-
+            {skill.imageSrc && <img src={skill.imageSrc} alt={skill.title} />}
+            <div className="likes-section">
+              <p className="like-count">Likes: {skill.likes}</p>
+              <button className="like-button" onClick={() => toggleLike(skill.id)}>
+                {skill.hasLiked ? "Unlike" : "Like"}
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -109,3 +119,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+

@@ -11,4 +11,6 @@ public interface SkillRepository extends MongoRepository<Skill, String> {
     List<Skill> findAllByEmail(String email);
     List<Skill> findAll();
 
+    List<Skill> findByTitle(String skillTitle);
+
 }

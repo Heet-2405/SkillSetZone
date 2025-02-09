@@ -1,0 +1,173 @@
+/* General Container */
+.p-4 {
+    padding: 2rem; /* Increased padding for better spacing */
+    max-width: 1200px; /* Limit container width */
+    margin: 0 auto; /* Center the container horizontally */
+    background-color: #f9fafb; /* Light background for the entire page */
+    border-radius: 0.5rem; /* Rounded corners for the container */
+  }
+  
+  /* Title */
+  .text-2xl {
+    font-size: 2rem; /* Increased font size */
+    font-weight: 700;
+    text-align: center; /* Center title */
+  }
+  
+  .text-xl {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem; /* Space below the subheading */
+  }
+  
+  .font-bold {
+    font-weight: 700;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1.5rem; /* Increased margin */
+  }
+  
+  .mb-2 {
+    margin-bottom: 0.75rem; /* Increased margin */
+  }
+  
+  /* Input fields and buttons */
+  input[type="text"], textarea, input[type="file"] {
+    width: 100%;
+    padding: 0.75rem; /* Increased padding */
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+    font-size: 1rem; /* Ensure consistent text size */
+  }
+  
+  textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+  
+  button {
+    padding: 0.75rem 1.5rem; /* Increased button padding */
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 200px; /* Limit button width */
+    margin-top: 1rem;
+    display: block; /* Ensure button is on its own line */
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Form submission button */
+  .bg-blue-500 {
+    background-color: #2563eb
+  }
+  
+  .bg-blue-500:hover {
+    background-color: #afb7c9;
+  }
+  
+  /* Edit and Delete buttons */
+  .bg-yellow-500 {
+    background-color: #f59e0b;
+  }
+  
+  .bg-yellow-500:hover {
+    background-color: #d97706;
+  }
+  
+  .bg-red-500 {
+    background-color: #ef4444;
+  }
+  
+  .bg-red-500:hover {
+    background-color: #dc2626;
+  }
+  
+  .text-white {
+    color: #fff;
+  }
+  
+  /* Skill List */
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .space-y-4 {
+    margin-top: 1.5rem; /* Increased space between list items */
+  }
+  
+  li {
+    padding: 1.5rem; /* Increased padding */
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Increased gap */
+    max-width: 800px; /* Limit skill card width */
+    margin: 0 auto 1.5rem; /* Center skill cards and add bottom margin */
+  }
+  
+  img {
+    border-radius: 0.25rem;
+    max-width: 100%; /* Make the image responsive */
+    height: auto;
+  }
+  
+  .mt-2 {
+    margin-top: 1rem; /* Increased margin */
+  }
+  
+  .flex {
+    display: flex;
+    gap: 1rem; /* Increased gap */
+    justify-content: center; /* Center buttons */
+  }
+  
+  /* Form labels */
+  label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    display: block; /* Ensures labels are on their own line */
+    margin-bottom: 0.5rem; /* Add space below labels */
+  }
+  
+  /* File input */
+  input[type="file"] {
+    padding: 0.75rem;
+    background-color: #f9f9f9;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .text-2xl {
+      font-size: 1.5rem;
+    }
+  
+    .text-xl {
+      font-size: 1.25rem;
+    }
+  
+    li {
+      padding: 1rem;
+    }
+  
+    button {
+      padding: 0.6rem 1.2rem;
+    }
+  
+    img {
+      width: 100%; /* Ensure image takes full width on smaller screens */
+      height: auto;
+    }
+  }
+  

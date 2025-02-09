@@ -35,4 +35,9 @@ public class UserController {
     public String logout() {
         return "User logged out successfully!";
     }
+
+    @GetMapping("/profile")
+    public User getUserProfile() {
+        return userService.getUserDetail();
+    }
 }

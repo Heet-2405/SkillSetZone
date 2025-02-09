@@ -7,6 +7,8 @@ import Footer from './components/Footer.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Skill from './components/Skill.jsx';
+import SearchResults from './components/SearchResults.jsx';
+import Profile from './components/Profile.jsx';
 const App = () => {
   const layoutStyles = {
     minHeight: '100vh',
@@ -40,6 +42,22 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Skill />
+                </ProtectedRoute>
+              }
+            />
+            {/* <Route
+              path="/search"
+              element={
+                <ProtectedRoute>
+                  <SearchResults />
+                </ProtectedRoute>
+              }
+            /> */}
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />

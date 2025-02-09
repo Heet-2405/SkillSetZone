@@ -1,0 +1,105 @@
+/* Dashboard.css */
+
+/* General layout for the dashboard */
+.dashboard-container {
+    padding: 2rem;
+    background-color: #f4f6f9;
+    min-height: 100vh;
+  }
+  
+  /* Header Styling */
+  .dashboard-header {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 2rem;
+  }
+  
+  /* Skill card design */
+  .skill-card {
+    background-color: #fff;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .skill-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Skill card title */
+  .skill-card h3 {
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 0.8rem;
+  }
+  
+  /* Skill card description */
+  .skill-card p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  
+  /* Image handling */
+  .skill-card img {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Likes section styling */
+  .likes-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  
+  /* Like button styling */
+  .like-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  .like-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Like button disabled state */
+  .like-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Like count styling */
+  .like-count {
+    font-size: 1rem;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Error message styling */
+  .error-message {
+    color: #ff0000;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  

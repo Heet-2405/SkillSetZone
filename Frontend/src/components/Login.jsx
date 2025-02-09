@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { login } from '/src/services/AuthService.jsx';
 import { useNavigate, Link } from 'react-router-dom';
+import '/src/css/Login.css';  
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,8 +13,8 @@ const Login = () => {
     localStorage.removeItem('auth');
     e.preventDefault();
     try {
-      await login(email, password); // Login service handles storage
-      navigate('/dashboard'); // Redirect to dashboard
+      await login(email, password);
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'An error occurred during login.');
     }
@@ -30,6 +31,7 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           required
+          className="input-field"
         />
         <input
           type="password"
@@ -37,9 +39,10 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           required
+          className="input-field"
         />
-        <button type="submit">Login</button>
-        <Link to="/signup">Don't have an account? Sign Up</Link>
+        <button type="submit" className="submit-button">Login</button>
+        <Link to="/signup" className="signup-link">Don't have an account? Sign Up</Link>
       </form>
     </div>
   );

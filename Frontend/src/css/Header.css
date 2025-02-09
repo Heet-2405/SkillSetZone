@@ -1,0 +1,108 @@
+/* Header container */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px; /* Reduced padding for a more compact feel */
+    background-color: #007bff;
+    color: white;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  /* Logo Container */
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Reduced gap between logo and other elements */
+  }
+  
+  .logo {
+    font-size: 24px; /* Slightly smaller font size for logo */
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  
+  /* Search Container */
+  .search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35%; /* Reduced width for a more compact search bar */
+  }
+  
+  /* Search Input */
+  .search-input {
+    width: 70%;  /* Narrowed the input */
+    padding: 8px 15px; /* Reduced padding for a more sleek design */
+    border-radius: 25px; /* Slightly less rounded for a more professional feel */
+    border: 1px solid #ccc;
+    font-size: 14px; /* Slightly smaller font for input */
+    outline: none;
+    background-color: #fff;
+    transition: all 0.3s ease;
+  }
+  
+  /* Search Input Focus Effect */
+  .search-input:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 4px rgba(0, 86, 179, 0.5);
+  }
+  
+  /* Navigation */
+  .nav {
+    display: flex;
+    gap: 15px; /* Slightly reduced gap for tighter layout */
+    align-items: center;
+  }
+  
+  /* Button Styling */
+  .button {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 8px 18px; /* Reduced button padding */
+    border-radius: 25px; /* Less rounded, more subtle */
+    font-size: 14px; /* Smaller font for a more professional look */
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Hover Effect */
+  .button:hover {
+    background-color: white;
+    color: #007bff;
+    transform: translateY(-1px); /* Slight hover effect */
+  }
+  
+  /* Active/Press Effect */
+  .button:active {
+    transform: translateY(1px);
+    background-color: #0056b3;
+    color: white;
+  }
+  
+  /* Button for Logout */
+  .button.logout {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+  }
+  
+  .button.logout:hover {
+    background-color: white;
+    color: #dc3545;
+  }
+  
+  /* Hide search input and nav for specific pages */
+  .hide-elements {
+    display: none;
+  }
+  

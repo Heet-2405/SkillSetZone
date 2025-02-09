@@ -6,11 +6,14 @@ import com.SkillSetZone.SkillSetZone.Repo.UserRepository;
 import com.SkillSetZone.SkillSetZone.controller.AuthenticationFailedException;
 import com.SkillSetZone.SkillSetZone.controller.EmailAlreadyInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -62,5 +65,16 @@ public class UserService {
     // Check if email already exists
     public boolean isEmailAlreadyInUse(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    private String getAuthenticatedEmail() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userDetails.getUsername();
+    }
+
+    public User getUserDetail(){
+        String email = getAuthenticatedEmail();
+        Optional<User> user = userRepository.findByEmail(email);
+        return user.orElseThrow(() -> new IllegalArgumentException("User with email " + email + " not found"));
     }
 }

@@ -85,7 +85,10 @@ public class SkillController {
         String credentials = new String(java.util.Base64.getDecoder().decode(base64Credentials));
         return credentials.split(":")[0]; // Assume email is the username
     }
-
+    @GetMapping("/search")
+    public List<Skill> searchSkills(@RequestParam String skillTitle) {
+        return skillService.getSearchedSkills(skillTitle);
+    }
 
 
 }
