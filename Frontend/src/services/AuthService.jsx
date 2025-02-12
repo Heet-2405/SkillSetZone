@@ -3,15 +3,20 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8080/public';
 
-// Signup service
+// Signup service (now using FormData)
 export const signup = async (userData) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/signup`, userData);
+    const response = await axios.post(`${API_BASE_URL}/signup`, userData, {
+      headers: {
+        'Content-Type': 'multipart/form-data' // Required for file upload
+      }
+    });
     return response.data;
   } catch (error) {
     throw error.response?.data || 'Error during sign-up';
   }
 };
+
 
 // Login service
 export const login = async (email, password) => {

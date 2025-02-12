@@ -3,8 +3,11 @@ package com.SkillSetZone.SkillSetZone.controller;
 import com.SkillSetZone.SkillSetZone.Entity.User;
 import com.SkillSetZone.SkillSetZone.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,19 +21,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Get all users
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    // Get user by ID
     @GetMapping("/{id}")
     public User getUserById(@PathVariable String id) {
         return userService.getUserById(id);
     }
 
-    // Logout (dummy response for now, actual logout depends on session handling)
     @PostMapping("/logout")
     public String logout() {
         return "User logged out successfully!";
@@ -39,5 +39,18 @@ public class UserController {
     @GetMapping("/profile")
     public User getUserProfile() {
         return userService.getUserDetail();
+    }
+
+
+    @PostMapping(value = "/updateUser", consumes = {"multipart/form-data"})
+    public ResponseEntity<String> updateUser(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "password", required = false) String password,
+            @RequestParam(value = "branch", required = false) String branch,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+
+        userService.updateUser(name, email, password, branch, image);
+        return ResponseEntity.ok("User updated successfully!");
     }
 }

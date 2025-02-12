@@ -10,7 +10,11 @@ import java.util.List;
 public interface SkillRepository extends MongoRepository<Skill, String> {
     List<Skill> findAllByEmail(String email);
     List<Skill> findAll();
+    List<Skill>findByTitleContainingIgnoreCase(String title);
 
-    List<Skill> findByTitle(String skillTitle);
 
 }
+
+
+
+

@@ -92,13 +92,16 @@ public class SkillService {
             throw new IllegalArgumentException("Skill not found.");
         }
     }
+
+
     public List<Map<String, Object>> getAllSkills() {
         List<Skill> skills = skillRepository.findAll();
         List<Map<String, Object>> response = new ArrayList<>();
 
         for (Skill skill : skills) {
             Optional<User> user = userRepository.findByEmail(skill.getEmail()); // Fetch user by email
-            String username = (user.isPresent()) ? user.get().getName() : "Unknown"; // Get username
+            String username = user.map(User::getName).orElse("Unknown"); // Get username
+            byte[] profileImage = user.map(User::getImage).orElse(null); // Get profile image
 
             Map<String, Object> skillData = new HashMap<>();
             skillData.put("id", skill.getId());
@@ -106,13 +109,15 @@ public class SkillService {
             skillData.put("description", skill.getDescription());
             skillData.put("likes", skill.getLikes());
             skillData.put("username", username); // Replace email with username
-            skillData.put("image", skill.getImage()); // Ensure image is handled properly
-
+            skillData.put("image", skill.getImage() != null ? Base64.getEncoder().encodeToString(skill.getImage()) : null);
+            skillData.put("profileImage", profileImage != null ? Base64.getEncoder().encodeToString(profileImage) : null); // Convert profile image
+            skillData.put("email",user.get().getEmail());
             response.add(skillData);
         }
 
         return response;
     }
+
 
     @Transactional
     public Map<String, Object> toggleLikeStatus(String skillId, String email) {
@@ -142,14 +147,29 @@ public class SkillService {
         return response;
     }
 
-    public List<Skill> getSearchedSkills(String skillTitle) {
-        if (skillTitle == null || skillTitle.trim().isEmpty()) {
+    public List<Map<String, Object>> searchSkillsByTitle(String title) {
+        List<Skill> skills = skillRepository.findByTitleContainingIgnoreCase(title);
+        List<Map<String, Object>> response = new ArrayList<>();
 
-            return new ArrayList<>();
+        for (Skill skill : skills) {
+            Optional<User> user = userRepository.findByEmail(skill.getEmail());
+            String username = user.map(User::getName).orElse("Unknown");
+            byte[] profileImage = user.map(User::getImage).orElse(null);
+
+            Map<String, Object> skillData = new HashMap<>();
+            skillData.put("id", skill.getId());
+            skillData.put("title", skill.getTitle());
+            skillData.put("description", skill.getDescription());
+            skillData.put("likes", skill.getLikes());
+            skillData.put("username", username);
+            skillData.put("image", skill.getImage() != null ? Base64.getEncoder().encodeToString(skill.getImage()) : null);
+            skillData.put("profileImage", profileImage != null ? Base64.getEncoder().encodeToString(profileImage) : null);
+            skillData.put("email", user.get().getEmail());
+            response.add(skillData);
         }
-
-        return skillRepository.findByTitle(skillTitle);
+        return response;
     }
+
 
 
 

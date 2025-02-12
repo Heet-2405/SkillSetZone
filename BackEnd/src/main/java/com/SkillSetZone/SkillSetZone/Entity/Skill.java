@@ -15,6 +15,12 @@ public class Skill {
     private String email;
 
 
+    public Skill() {
+
+    }
+
+
+
     public Skill(String id, String title, String description, byte[] image, int likes, String email) {
         this.id = id;
         this.title = title;
@@ -22,10 +28,10 @@ public class Skill {
         this.image = image;
         this.likes = likes;
         this.email = email;
+
     }
 
-    public Skill() {
-    }
+
 
     public String getId() {
         return id;

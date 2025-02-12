@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,20 +27,21 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // Sign-up logic
     public User createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new EmailAlreadyInUseException("Email is already in use.");
         }
 
-        // Encrypt the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Save the user
+        // Image is optional, if null, do nothing
+        if (user.getImage() == null) {
+            user.setImage(null);
+        }
+
         return userRepository.save(user);
     }
 
-    // Authentication logic for login
     public User authenticateUser(LoginRequest loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new AuthenticationFailedException("Invalid email or password"));
@@ -51,20 +53,13 @@ public class UserService {
         return user;
     }
 
-    // Fetch user by ID
     public User getUserById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User with ID " + id + " not found"));
     }
 
-    // Fetch all users
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    // Check if email already exists
-    public boolean isEmailAlreadyInUse(String email) {
-        return userRepository.existsByEmail(email);
     }
 
     private String getAuthenticatedEmail() {
@@ -76,5 +71,31 @@ public class UserService {
         String email = getAuthenticatedEmail();
         Optional<User> user = userRepository.findByEmail(email);
         return user.orElseThrow(() -> new IllegalArgumentException("User with email " + email + " not found"));
+    }
+
+    public User updateUser(String name, String email, String password, String branch, MultipartFile image) {
+        String currentEmail = getAuthenticatedEmail();
+        Optional<User> userOptional = userRepository.findByEmail(currentEmail);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            // Update only provided fields
+            if (name != null && !name.isEmpty()) user.setName(name);
+            if (email != null && !email.isEmpty()) user.setEmail(email);
+            if (password != null && !password.isEmpty()) user.setPassword(passwordEncoder.encode(password)); // Hash password
+            if (branch != null && !branch.isEmpty()) user.setCollegeBranch(branch);
+
+            if (image != null && !image.isEmpty()) {
+                try {
+                    user.setImage(image.getBytes()); // Convert image to byte array
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return userRepository.save(user);
+        }
+        return null;
     }
 }

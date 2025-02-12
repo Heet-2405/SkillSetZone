@@ -45,14 +45,14 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
+            <Route
               path="/search"
               element={
                 <ProtectedRoute>
                   <SearchResults />
                 </ProtectedRoute>
               }
-            /> */}
+            />
             <Route
               path="/profile"
               element={
