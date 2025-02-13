@@ -33,8 +33,9 @@ public class SkillController {
     public Skill createSkill(
             @RequestPart(value = "file", required = false) MultipartFile image,
             @RequestParam("title") String title,
-            @RequestParam("description") String description) throws IOException {
-        return skillService.addSkill(title, description, image, 0);
+            @RequestParam("description") String description,
+            @RequestParam("tool") String tool) throws IOException {
+        return skillService.addSkill(title, description, image, 0,tool);
     }
 
     @PutMapping("/update/{id}")
@@ -43,8 +44,9 @@ public class SkillController {
             @RequestPart(value = "file", required = false) MultipartFile image,
             @RequestParam("title") String title,
             @RequestParam("description") String description,
-            @RequestParam("likes") int likes) throws IOException {
-        return skillService.updateSkill(id, title, description, image, likes);
+            @RequestParam("likes") int likes,
+            @RequestParam("tool") String tool) throws IOException {
+        return skillService.updateSkill(id, title, description, image, likes,tool);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -87,9 +89,10 @@ public class SkillController {
     }
 
     @GetMapping("/search")
-    public List<Map<String, Object>> searchSkills(@RequestParam("title") String title) {
-        return skillService.searchSkillsByTitle(title);
+    public List<Map<String, Object>> searchSkills(@RequestParam("query") String query) {
+        return skillService.searchSkillsByTitleOrTool(query);
     }
+
 
 
 

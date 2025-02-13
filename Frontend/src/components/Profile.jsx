@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "/src/css/Profile.css";
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -23,7 +24,6 @@ function Profile() {
         method: "GET",
         headers: { Authorization: `Basic ${authToken}` },
       });
-
       if (!response.ok) throw new Error("Failed to fetch user profile");
 
       const data = await response.json();
@@ -71,7 +71,6 @@ function Profile() {
         headers: { Authorization: `Basic ${authToken}` },
         body: formDataToSend,
       });
-
       if (!response.ok) throw new Error("Failed to update profile");
 
       alert("Profile updated successfully!");
@@ -83,18 +82,18 @@ function Profile() {
   };
 
   return (
-    <div>
+    <div className="profile-page">
+    <div className="profile-container">
       <h2>User Profile</h2>
       {user ? (
         <div>
           <img
             src={previewImage}
             alt="Profile"
-            style={{ width: "150px", height: "150px", borderRadius: "50%" }}
+            className="profile-image"
           />
-
           {editMode ? (
-            <div>
+            <div className="edit-form">
               <label>Profile Image:</label>
               <input type="file" accept="image/*" onChange={handleImageChange} />
 
@@ -109,23 +108,27 @@ function Profile() {
 
               <label>Branch:</label>
               <select name="branch" value={formData.branch} onChange={handleChange}>
-                <option value="">Select Branch</option>
-                <option value="CSE">CSE</option>
-                <option value="IT">IT</option>
-                <option value="ECE">ECE</option>
-                <option value="ME">ME</option>
-                <option value="EE">EE</option>
+              <option value="">Select College Branch</option>
+          <option value="CSE">Computer Science</option>
+          <option value="IT">Information Technology</option>
+          <option value="ECE">Electronics & Communication</option>
+          <option value="EE">Electrical Engineering</option>
+          <option value="ME">Mechanical Engineering</option>
               </select>
 
-              <button onClick={handleUpdate}>Save</button>
-              <button onClick={() => setEditMode(false)}>Cancel</button>
+              <div className="button-group">
+                <button onClick={handleUpdate}>Save</button>
+                <button onClick={() => setEditMode(false)}>Cancel</button>
+              </div>
             </div>
           ) : (
-            <div>
+            <div className="profile-info">
               <p><strong>Name:</strong> {user.name}</p>
               <p><strong>Email:</strong> {user.email}</p>
               <p><strong>Branch:</strong> {user.collegeBranch}</p>
-              <button onClick={() => setEditMode(true)}>Edit Profile</button>
+              <button className="edit-btn" onClick={() => setEditMode(true)}>
+                Edit Profile
+              </button>
             </div>
           )}
         </div>
@@ -133,7 +136,12 @@ function Profile() {
         <p>Loading profile...</p>
       )}
     </div>
+    </div>
   );
 }
 
 export default Profile;
+
+
+
+

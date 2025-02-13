@@ -33,7 +33,7 @@ public class SkillService {
         return userDetails.getUsername();
     }
 
-    public Skill addSkill(String title, String description, MultipartFile image, int likes) throws IOException {
+    public Skill addSkill(String title, String description, MultipartFile image, int likes,String tool) throws IOException {
         String email = getAuthenticatedEmail();
         Skill skill = new Skill();
         skill.setTitle(title);
@@ -43,6 +43,10 @@ public class SkillService {
 
         if (image != null && !image.isEmpty()) {
             skill.setImage(image.getBytes());
+        }
+
+        if(tool != null && !tool.isEmpty()) {
+            skill.setTool(tool);
         }
 
         return skillRepository.save(skill);
@@ -69,7 +73,7 @@ public class SkillService {
         }
     }
 
-    public Skill updateSkill(String id, String title, String description, MultipartFile image, int likes) throws IOException {
+    public Skill updateSkill(String id, String title, String description, MultipartFile image, int likes, String tool) throws IOException {
         String email = getAuthenticatedEmail();
         Optional<Skill> skillOptional = skillRepository.findById(id);
 
@@ -81,10 +85,15 @@ public class SkillService {
 
             skill.setTitle(title);
             skill.setDescription(description);
+
             skill.setLikes(likes);
 
             if (image != null && !image.isEmpty()) {
                 skill.setImage(image.getBytes());
+            }
+
+            if(tool != null && !tool.isEmpty()) {
+                skill.setTool(tool);
             }
 
             return skillRepository.save(skill);
@@ -106,6 +115,7 @@ public class SkillService {
             Map<String, Object> skillData = new HashMap<>();
             skillData.put("id", skill.getId());
             skillData.put("title", skill.getTitle());
+            skillData.put("tool", skill.getTool());
             skillData.put("description", skill.getDescription());
             skillData.put("likes", skill.getLikes());
             skillData.put("username", username); // Replace email with username
@@ -147,8 +157,14 @@ public class SkillService {
         return response;
     }
 
-    public List<Map<String, Object>> searchSkillsByTitle(String title) {
-        List<Skill> skills = skillRepository.findByTitleContainingIgnoreCase(title);
+    public List<Map<String, Object>> searchSkillsByTitleOrTool(String searchQuery) {
+        List<Skill> skills = skillRepository.findByTitleContainingIgnoreCase(searchQuery);
+
+        // If no results found, search by tool
+        if (skills.isEmpty()) {
+            skills = skillRepository.findByToolContainingIgnoreCase(searchQuery);
+        }
+
         List<Map<String, Object>> response = new ArrayList<>();
 
         for (Skill skill : skills) {
@@ -162,13 +178,16 @@ public class SkillService {
             skillData.put("description", skill.getDescription());
             skillData.put("likes", skill.getLikes());
             skillData.put("username", username);
+            skillData.put("tool", skill.getTool() != null ? skill.getTool() : null);
             skillData.put("image", skill.getImage() != null ? Base64.getEncoder().encodeToString(skill.getImage()) : null);
             skillData.put("profileImage", profileImage != null ? Base64.getEncoder().encodeToString(profileImage) : null);
-            skillData.put("email", user.get().getEmail());
+            skillData.put("email", user.map(User::getEmail).orElse("Unknown"));
+
             response.add(skillData);
         }
         return response;
     }
+
 
 
 

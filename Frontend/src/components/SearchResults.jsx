@@ -21,14 +21,14 @@ const SearchResults = () => {
     } else if (searchQuery) {
       setLoading(true);
       axios
-        .get(`http://localhost:8080/api/skills/search?title=${encodeURIComponent(searchQuery)}`, {
+        .get(`http://localhost:8080/api/skills/search?query=${encodeURIComponent(searchQuery)}`, {
           headers: {
             Authorization: `Basic ${authToken}`, // Include auth token
           },
         })
         .then((response) => {
           console.log("API response:", response);
-          
+  
           const skillsWithImages = response.data.map((skill) => ({
             ...skill,
             profileImage: skill.profileImage
@@ -37,10 +37,15 @@ const SearchResults = () => {
             imageSrc: skill.image ? `data:image/jpeg;base64,${skill.image}` : null,
             createdAt: new Date(parseInt(skill.id.substring(0, 8), 16) * 1000),
           }));
-
-          // Sort by timestamp (newest first)
-          const sortedSkills = skillsWithImages.sort((a, b) => b.createdAt - a.createdAt);
-
+  
+          // Sort by likes (descending order). If likes are equal, sort by createdAt (newest first)
+          const sortedSkills = skillsWithImages.sort((a, b) => {
+            if (b.likes !== a.likes) {
+              return b.likes - a.likes; // Higher likes first
+            }
+            return b.createdAt - a.createdAt; // If likes are equal, newest first
+          });
+  
           setSkills(sortedSkills);
           setLoading(false);
         })
@@ -51,6 +56,7 @@ const SearchResults = () => {
         });
     }
   }, [searchQuery, authToken, navigate]);
+  
 
   return (
     <div className="search-results">
@@ -73,6 +79,7 @@ const SearchResults = () => {
                 </div>
               </div>
               <h3>{skill.title}</h3>
+              {skill.tool ? <h4>Tool: {skill.tool}</h4> : null}
               <p>{skill.description}</p>
               {skill.imageSrc && <img src={skill.imageSrc} alt={skill.title} className="skill-image" />}
               <h3>Likes: {skill.likes}</h3>

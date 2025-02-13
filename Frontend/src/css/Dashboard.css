@@ -1,19 +1,28 @@
 /* Dashboard Container */
 .dashboard-container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+  max-width: 600px; /* Match profile-container width */
+  margin: 60px auto; /* Match profile-container margin */
+  padding: 30px; /* Match profile-container padding */
   font-family: "Arial", sans-serif;
-  background-color: #f8f8f8;
+  background-color: #ffffff; /* Match profile-container background */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Match profile-container shadow */
+  border-radius: 10px; /* Match profile-container border-radius */
+  transition: transform 0.3s ease; /* Match profile-container transition */
+}
+
+.dashboard-container:hover {
+  transform: translateY(-5px);
 }
 
 /* Dashboard Header */
 .dashboard-header {
   text-align: center;
-  font-size: 2rem;
+  font-size: 28px;
   font-weight: bold;
   color: #333;
   margin-bottom: 20px;
+  border-bottom: 2px solid #e1e4e8; /* Match profile-container heading */
+  padding-bottom: 10px;
 }
 
 /* Skills List - Flexbox Layout */
@@ -27,7 +36,7 @@
 .skill-card {
   background: white;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
   border: 1px solid #ddd;
@@ -45,7 +54,7 @@
   margin-bottom: 15px;
 }
 
-/* Profile Image (Simple Circular) */
+/* Profile Image */
 .profile-image {
   width: 60px;
   height: 60px;
@@ -118,9 +127,19 @@
   background-color: #21578e;
 }
 
+/* Divider */
+.skill-divider {
+  border: none;
+  height: 1px;
+  background-color: #ddd;
+  margin: 10px 0;
+}
+
+/* Responsive Styles */
 @media (max-width: 600px) {
   .dashboard-container {
-    padding: 10px;
+    padding: 20px;
+    margin: 20px auto;
   }
 
   .skill-card {

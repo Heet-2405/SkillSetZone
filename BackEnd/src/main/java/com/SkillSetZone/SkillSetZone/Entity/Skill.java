@@ -13,7 +13,17 @@ public class Skill {
     private byte[] image; // Binary data for the image
     private int likes;
     private String email;
+    private String tool;
 
+
+
+    public String getTool() {
+        return tool;
+    }
+
+    public void setTool(String tool) {
+        this.tool = tool;
+    }
 
     public Skill() {
 
@@ -21,13 +31,14 @@ public class Skill {
 
 
 
-    public Skill(String id, String title, String description, byte[] image, int likes, String email) {
+    public Skill(String id, String title, String description, byte[] image, int likes, String email, String tool) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.image = image;
         this.likes = likes;
         this.email = email;
+        this.tool = tool;
 
     }
 

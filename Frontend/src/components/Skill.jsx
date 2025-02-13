@@ -6,6 +6,7 @@ const Skill = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [tool,setTool] = useState("");
   const [editingSkillId, setEditingSkillId] = useState(null);
 
   const authToken = localStorage.getItem("auth"); // Retrieve auth from local storage
@@ -52,6 +53,7 @@ const Skill = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
+    if( tool )formData.append("tool", tool);
     if (image) formData.append("file", image);
 
     const headers = {
@@ -88,6 +90,7 @@ const Skill = () => {
       setTitle("");
       setDescription("");
       setImage(null);
+      setTool("");
       fetchSkills();
     } catch (error) {
       console.error("Error saving skill:", error);
@@ -123,6 +126,7 @@ const Skill = () => {
   const handleEditSkill = (skill) => {
     setEditingSkillId(skill.id);
     setTitle(skill.title);
+    setTool(skill.tool);
     setDescription(skill.description);
   };
 
@@ -141,6 +145,15 @@ const Skill = () => {
             required
           />
         </div>
+
+        <input
+  type="text"
+  value={tool}
+  onChange={(e) => setTool(e.target.value)}
+  className="w-full p-2 border rounded tool-input"
+  required
+/>
+
 
         <div className="mb-2">
           <label className="block text-sm font-medium mb-1">Description</label>
@@ -174,6 +187,7 @@ const Skill = () => {
         {skills.map((skill) => (
           <li key={skill.id} className="p-4 border rounded">
             <h3 className="text-lg font-bold">{skill.title}</h3>
+            <h3 className="text-lg font-bold">{skill.tool}</h3>
             <p>{skill.description}</p>
             {skill.image && (
               <img

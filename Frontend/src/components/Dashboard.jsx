@@ -111,7 +111,9 @@ const Dashboard = () => {
                 <p className="user-email">{skill.email}</p>
               </div>
             </div>
+            <hr className="skill-divider" />
             <h3>{skill.title}</h3>
+            {skill.tool ? <h4>Tool:{skill.tool}</h4> : null}
             <p>{skill.description}</p>
             {skill.imageSrc && <img src={skill.imageSrc} alt={skill.title} className="skill-image" />}
             <div className="likes-section">
