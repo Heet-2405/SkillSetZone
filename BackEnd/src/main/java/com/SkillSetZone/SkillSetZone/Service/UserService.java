@@ -2,6 +2,7 @@ package com.SkillSetZone.SkillSetZone.Service;
 
 import com.SkillSetZone.SkillSetZone.DTO.LoginRequest;
 import com.SkillSetZone.SkillSetZone.Entity.User;
+import com.SkillSetZone.SkillSetZone.Repo.SkillRepository;
 import com.SkillSetZone.SkillSetZone.Repo.UserRepository;
 import com.SkillSetZone.SkillSetZone.controller.AuthenticationFailedException;
 import com.SkillSetZone.SkillSetZone.controller.EmailAlreadyInUseException;
@@ -13,7 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -21,10 +24,12 @@ public class UserService {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final UserRepository userRepository;
+    private final SkillRepository skillRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, SkillRepository skillRepository) {
         this.userRepository = userRepository;
+        this.skillRepository = skillRepository;
     }
 
     public User createUser(User user) {
@@ -73,7 +78,7 @@ public class UserService {
         return user.orElseThrow(() -> new IllegalArgumentException("User with email " + email + " not found"));
     }
 
-    public User updateUser(String name, String email, String password, String branch, MultipartFile image) {
+    public User updateUser(String name, String email, String password, String branch, MultipartFile image,String bio) {
         String currentEmail = getAuthenticatedEmail();
         Optional<User> userOptional = userRepository.findByEmail(currentEmail);
 
@@ -85,7 +90,7 @@ public class UserService {
             if (email != null && !email.isEmpty()) user.setEmail(email);
             if (password != null && !password.isEmpty()) user.setPassword(passwordEncoder.encode(password)); // Hash password
             if (branch != null && !branch.isEmpty()) user.setCollegeBranch(branch);
-
+            if(bio != null && !bio.isEmpty()) user.setBio(bio);
             if (image != null && !image.isEmpty()) {
                 try {
                     user.setImage(image.getBytes()); // Convert image to byte array
@@ -98,4 +103,20 @@ public class UserService {
         }
         return null;
     }
+
+    public Map<String, Object> getUserProfile(String name) {
+        Optional<User> user = userRepository.findByName(name);
+        String email = user.get().getEmail();
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("name", user.get().getName());
+        userData.put("email", user.get().getEmail());
+        userData.put("image", user.get().getImage()); // Assuming base64-encoded image string
+        userData.put("collegeBranch", user.get().getCollegeBranch());
+        userData.put("skill", skillRepository.findAllByEmail(email));
+        userData.put("bio", user.get().getBio());
+
+        return userData;
+    }
+
 }

@@ -1,60 +1,68 @@
-/* Dashboard Container */
+:root {
+  --primary-color: #007bff;
+  --primary-hover: #0056b3;
+  --background-color: #f5f7fa;
+  --card-background: #ffffff;
+  --text-color: #333;
+  --text-muted: #666;
+  --border-color: #ddd;
+  --box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --border-radius: 10px;
+  --transition: all 0.3s ease;
+}
+
 .dashboard-container {
-  max-width: 600px; /* Match profile-container width */
-  margin: 60px auto; /* Match profile-container margin */
-  padding: 30px; /* Match profile-container padding */
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 30px;
   font-family: "Arial", sans-serif;
-  background-color: #ffffff; /* Match profile-container background */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Match profile-container shadow */
-  border-radius: 10px; /* Match profile-container border-radius */
-  transition: transform 0.3s ease; /* Match profile-container transition */
+  background-color: var(--card-background);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
 }
 
 .dashboard-container:hover {
   transform: translateY(-5px);
 }
 
-/* Dashboard Header */
 .dashboard-header {
   text-align: center;
   font-size: 28px;
   font-weight: bold;
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 20px;
-  border-bottom: 2px solid #e1e4e8; /* Match profile-container heading */
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 10px;
 }
 
-/* Skills List - Flexbox Layout */
 .skills-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Skill Card */
 .skill-card {
-  background: white;
+  background: var(--card-background);
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
-  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  border: 1px solid var(--border-color);
 }
 
 .skill-card:hover {
   transform: scale(1.02);
 }
 
-/* User Info - Flex Row */
 .user-info {
   display: flex;
   align-items: center;
   gap: 15px;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 
-/* Profile Image */
 .profile-image {
   width: 60px;
   height: 60px;
@@ -62,41 +70,44 @@
   object-fit: cover;
 }
 
-/* User Text Info */
 .user-info h2 {
   font-size: 1rem;
   margin: 0;
-  color: #333;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .user-email {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-muted);
+  cursor: pointer;
 }
 
-/* Skill Title */
+.user-info:hover h2 {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
 .skill-card h3 {
   font-size: 1.5rem;
   margin-top: 10px;
-  color: #222;
+  color: var(--text-color);
 }
 
-/* Skill Description */
 .skill-card p {
   font-size: 1rem;
-  color: #555;
+  color: var(--text-muted);
 }
 
-/* Skill Image */
 .skill-image {
   width: 100%;
   max-height: 300px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   margin-top: 10px;
 }
 
-/* Likes Section */
 .likes-section {
   display: flex;
   align-items: center;
@@ -104,39 +115,36 @@
   margin-top: 15px;
 }
 
-/* Like Count */
 .like-count {
   font-size: 1rem;
   font-weight: bold;
-  color: #444;
+  color: var(--text-color);
 }
 
-/* Like Button */
 .like-button {
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white;
   padding: 8px 14px;
   border-radius: 20px;
   border: none;
   cursor: pointer;
   font-size: 1rem;
-  transition: background 0.2s ease-in-out;
+  transition: var(--transition);
 }
 
 .like-button:hover {
-  background-color: #21578e;
+  background-color: var(--primary-hover);
 }
 
-/* Divider */
 .skill-divider {
   border: none;
   height: 1px;
-  background-color: #ddd;
+  background-color: var(--border-color);
   margin: 10px 0;
 }
 
-/* Responsive Styles */
-@media (max-width: 600px) {
+/* 🔹 Mobile Optimization */
+@media (max-width: 768px) {
   .dashboard-container {
     padding: 20px;
     margin: 20px auto;
@@ -149,5 +157,10 @@
   .profile-image {
     width: 50px;
     height: 50px;
+  }
+
+  .like-button {
+    font-size: 0.9rem;
+    padding: 6px 12px;
   }
 }

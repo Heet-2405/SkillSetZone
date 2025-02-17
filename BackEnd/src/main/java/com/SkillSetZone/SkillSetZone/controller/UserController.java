@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -48,9 +49,16 @@ public class UserController {
             @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "password", required = false) String password,
             @RequestParam(value = "branch", required = false) String branch,
-            @RequestParam(value = "image", required = false) MultipartFile image) {
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(value = "bio", required = false)String bio) {
 
-        userService.updateUser(name, email, password, branch, image);
+        userService.updateUser(name, email, password, branch, image,bio);
         return ResponseEntity.ok("User updated successfully!");
+    }
+
+    @GetMapping("/profile/{name}")
+    public ResponseEntity<Map<String, Object>> getUserProfile(@PathVariable String name) {
+        Map<String, Object> userProfile = userService.getUserProfile(name);
+        return ResponseEntity.ok(userProfile);
     }
 }

@@ -8,7 +8,6 @@ const Dashboard = () => {
   const authToken = localStorage.getItem("auth");
   const navigate = useNavigate();
 
-
   const fetchSkills = useCallback(async () => {
     const headers = { Authorization: `Basic ${authToken}` };
     try {
@@ -23,18 +22,16 @@ const Dashboard = () => {
 
       const data = await response.json();
 
-      // Process data to include base64 images and timestamps
       const skillsWithTimestamp = data.map((skill) => ({
         ...skill,
         profileImage: skill.profileImage
           ? `data:image/jpeg;base64,${skill.profileImage}`
-          : defaultProfileImage, // Ensure a default profile picture
+          : defaultProfileImage,
         imageSrc: skill.image ? `data:image/jpeg;base64,${skill.image}` : null,
         hasLiked: skill.hasLiked || false,
-        createdAt: new Date(parseInt(skill.id.substring(0, 8), 16) * 1000), // Extract timestamp from ObjectId
+        createdAt: new Date(parseInt(skill.id.substring(0, 8), 16) * 1000),
       }));
 
-      // Sort by creation timestamp (newest first)
       const sortedSkills = skillsWithTimestamp.sort((a, b) => b.createdAt - a.createdAt);
 
       setSkills(sortedSkills);
@@ -42,22 +39,14 @@ const Dashboard = () => {
       console.error("Error fetching skills:", error);
       if (error.message.includes("401")) {
         navigate("/login");
+      } else {
+        alert("Something went wrong. Please try again later.");
       }
     }
   }, [authToken, navigate]);
 
   const toggleLike = async (skillId) => {
     const headers = { Authorization: `Basic ${authToken}` };
-
-    // Optimistic UI update
-    setSkills((prevSkills) =>
-      prevSkills.map((skill) =>
-        skill.id === skillId
-          ? { ...skill, likes: skill.hasLiked ? skill.likes - 1 : skill.likes + 1, hasLiked: !skill.hasLiked }
-          : skill
-      )
-    );
-
     try {
       const response = await fetch(`http://localhost:8080/api/skills/like/${skillId}`, {
         method: "PUT",
@@ -70,7 +59,6 @@ const Dashboard = () => {
 
       const { likes, hasLiked } = await response.json();
 
-      // Ensure backend response is reflected in state
       setSkills((prevSkills) =>
         prevSkills.map((skill) =>
           skill.id === skillId ? { ...skill, likes, hasLiked } : skill
@@ -78,8 +66,6 @@ const Dashboard = () => {
       );
     } catch (error) {
       console.error("Error toggling like:", error);
-
-      // Revert optimistic update in case of error
       setSkills((prevSkills) =>
         prevSkills.map((skill) =>
           skill.id === skillId
@@ -88,6 +74,10 @@ const Dashboard = () => {
         )
       );
     }
+  };
+
+  const handleUsernameClick = (username) => {
+    navigate(`/profile/${username}`);
   };
 
   useEffect(() => {
@@ -104,7 +94,7 @@ const Dashboard = () => {
       <div className="skills-list">
         {skills.map((skill) => (
           <div key={skill.id} className="skill-card">
-            <div className="user-info">
+            <div className="user-info" onClick={() => handleUsernameClick(skill.username)}>
               <img src={skill.profileImage} alt="User Profile" className="profile-image" />
               <div>
                 <h2>{skill.username}</h2>
@@ -113,13 +103,13 @@ const Dashboard = () => {
             </div>
             <hr className="skill-divider" />
             <h3>{skill.title}</h3>
-            {skill.tool ? <h4>Tool:{skill.tool}</h4> : null}
+            {skill.tool && <h4>Tool: {skill.tool}</h4>}
             <p>{skill.description}</p>
             {skill.imageSrc && <img src={skill.imageSrc} alt={skill.title} className="skill-image" />}
             <div className="likes-section">
               <p className="like-count">Likes: {skill.likes}</p>
               <button className="like-button" onClick={() => toggleLike(skill.id)}>
-                {skill.hasLiked ? "Like" : "Like"}
+                {skill.hasLiked ? "UnLike" : "Like"}
               </button>
             </div>
           </div>

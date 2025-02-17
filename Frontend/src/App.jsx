@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Skill from './components/Skill.jsx';
 import SearchResults from './components/SearchResults.jsx';
 import Profile from './components/Profile.jsx';
+import UserProfile from './components/UserProfile.jsx';
 const App = () => {
   const layoutStyles = {
     minHeight: '100vh',
@@ -37,6 +38,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            
             <Route
               path="/skills"
               element={
@@ -58,6 +60,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/:username" // Add route for UserProfile with dynamic username
+              element={
+                <ProtectedRoute>
+                  <UserProfile />
                 </ProtectedRoute>
               }
             />

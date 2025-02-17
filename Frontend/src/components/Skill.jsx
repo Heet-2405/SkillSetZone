@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
-import '/src/css/Skill.css';
+import "/src/css/Skill.css";
+
 const Skill = () => {
   const [skills, setSkills] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const [tool,setTool] = useState("");
+  const [tool, setTool] = useState("");
   const [editingSkillId, setEditingSkillId] = useState(null);
 
   const authToken = localStorage.getItem("auth"); // Retrieve auth from local storage
@@ -53,7 +54,7 @@ const Skill = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    if( tool )formData.append("tool", tool);
+    if (tool) formData.append("tool", tool); // Append only if tool is not empty
     if (image) formData.append("file", image);
 
     const headers = {
@@ -87,6 +88,7 @@ const Skill = () => {
         }
       }
 
+      // Reset form fields
       setTitle("");
       setDescription("");
       setImage(null);
@@ -126,7 +128,7 @@ const Skill = () => {
   const handleEditSkill = (skill) => {
     setEditingSkillId(skill.id);
     setTitle(skill.title);
-    setTool(skill.tool);
+    setTool(skill.tool || ""); // Ensure empty tool field if not present
     setDescription(skill.description);
   };
 
@@ -146,14 +148,15 @@ const Skill = () => {
           />
         </div>
 
-        <input
-  type="text"
-  value={tool}
-  onChange={(e) => setTool(e.target.value)}
-  className="w-full p-2 border rounded tool-input"
-  required
-/>
-
+        <div className="mb-2">
+          <label className="block text-sm font-medium mb-1">Tool (Optional)</label>
+          <input
+            type="text"
+            value={tool}
+            onChange={(e) => setTool(e.target.value)}
+            className="w-full p-2 border rounded"
+          />
+        </div>
 
         <div className="mb-2">
           <label className="block text-sm font-medium mb-1">Description</label>
@@ -187,11 +190,12 @@ const Skill = () => {
         {skills.map((skill) => (
           <li key={skill.id} className="p-4 border rounded">
             <h3 className="text-lg font-bold">{skill.title}</h3>
-            <h3 className="text-lg font-bold">{skill.tool}</h3>
+            {/* Only show tool if it exists */}
+            {skill.tool && <h3 className="tool-text">{skill.tool}</h3>}
+
             <p>{skill.description}</p>
             {skill.image && (
               <img
-                // If the image is already Base64, directly use it
                 src={`data:image/jpeg;base64,${skill.image}`}
                 alt="Skill"
                 className="mt-2 w-32 h-32 object-cover"

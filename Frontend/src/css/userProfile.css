@@ -1,0 +1,89 @@
+.user-profile-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px; /* Add gap between the profile card and skills section */
+  }
+  
+  .profile-card {
+    flex: 0 0 30%; /* Profile card takes 30% width */
+    min-width: 250px; /* Set a minimum width for the profile card */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: center;
+    box-sizing: border-box; /* Ensures padding doesn't affect width calculation */
+  }
+  
+  .profile-img {
+    width: 100%;
+    max-width: 180px; /* Increased image size */
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 15px; /* Reduced space below profile image */
+  }
+  
+  .profile-card h2,
+  .profile-card h3 {
+    margin-bottom: 8px; /* Reduced space between name, email, and branch */
+  }
+  
+  .skill-section {
+    flex: 0 0 70%; /* Skills section takes 70% width */
+    min-width: 300px; /* Ensure it doesn't get too small */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+  }
+  
+  .skill-item {
+    margin-bottom: 10px; /* Reduced space between skill items */
+  }
+  
+  .skill-item h5 {
+    margin-bottom: 5px; /* Reduced space between skill title and tool */
+  }
+  
+  .skill-item h5, .skill-item p {
+    margin-top: 0;
+    margin-bottom: 5px; /* Reduced space between title, tool, description, etc. */
+  }
+  
+  .skill-item p {
+    margin-top: 0;
+  }
+  
+  .skill-image {
+    width: 100%; /* Allow the image to fill the available space */
+    max-width: 250px; /* Increased maximum width for image size */
+    height: auto; /* Maintain aspect ratio */
+    margin-top: 5px;
+    margin-bottom: 10px;
+    object-fit: cover; /* Ensures the image maintains its aspect ratio without distortion */
+    border-radius: 8px; /* Add rounded corners to the image */
+    background-color: #f0f0f0; /* Optional background color */
+  }
+  
+  .skill-section ul {
+    padding-left: 0;
+    list-style-type: none;
+  }
+  
+  .skill-section ul li {
+    margin-bottom: 15px; /* Reduced space between list items */
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  h3 {
+    margin-bottom: 5px;
+  }
+  

@@ -16,13 +16,25 @@ public class User {
     private String email;
     private String password;
     private String collegeBranch;
+    private String bio;
+
+
+
     private byte[] image; // Optional field
     @DBRef
     private List<Skill> skills = new ArrayList<>();
 
     public User() {}
 
-    public User(String id, String name, String email, String password, String collegeBranch, byte[] image, List<Skill> skills) {
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public User(String id, String name, String email, String password, String collegeBranch, byte[] image, List<Skill> skills, String bio) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -30,6 +42,7 @@ public class User {
         this.collegeBranch = collegeBranch;
         this.image = image; // Image can be null
         this.skills = skills == null ? new ArrayList<>() : skills;
+        this.bio = bio;
     }
 
     // Getters and Setters
