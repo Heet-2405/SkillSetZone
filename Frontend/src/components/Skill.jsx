@@ -47,48 +47,35 @@ const Skill = () => {
     }
   }, [authToken, navigate]);
 
-  // Create or update skill
   const handleCreateOrUpdateSkill = async (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    if (tool) formData.append("tool", tool); // Append only if tool is not empty
+    formData.append("likes", 0); // Add this line with default likes value
+    if (tool) formData.append("tool", tool);
     if (image) formData.append("file", image);
-
-    const headers = {
-      Authorization: `Basic ${authToken}`,
-    };
-
+  
     try {
-      if (editingSkillId) {
-        // Update existing skill
-        const response = await fetch(
-          `http://localhost:8080/api/skills/update/${editingSkillId}`,
-          {
-            method: "PUT",
-            headers: headers,
-            body: formData,
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        setEditingSkillId(null);
-      } else {
-        // Create new skill
-        const response = await fetch("http://localhost:8080/api/skills/create", {
-          method: "POST",
-          headers: headers,
-          body: formData,
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+      const url = editingSkillId
+        ? `http://localhost:8080/api/skills/update/${editingSkillId}`
+        : "http://localhost:8080/api/skills/create";
+  
+      const response = await fetch(url, {
+        method: editingSkillId ? "PUT" : "POST",
+        headers: {
+          Authorization: `Basic ${authToken}`, // DO NOT set Content-Type for FormData
+        },
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text(); // Capture error details
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
-
-      // Reset form fields
+  
+      setEditingSkillId(null);
       setTitle("");
       setDescription("");
       setImage(null);
@@ -98,6 +85,7 @@ const Skill = () => {
       console.error("Error saving skill:", error);
     }
   };
+  
 
   // Delete a skill
   const handleDeleteSkill = async (id) => {

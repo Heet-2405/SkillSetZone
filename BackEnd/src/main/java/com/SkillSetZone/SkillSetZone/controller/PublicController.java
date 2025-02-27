@@ -2,6 +2,7 @@ package com.SkillSetZone.SkillSetZone.controller;
 
 import com.SkillSetZone.SkillSetZone.DTO.LoginRequest;
 import com.SkillSetZone.SkillSetZone.Entity.User;
+import com.SkillSetZone.SkillSetZone.Repo.UserRepository;
 import com.SkillSetZone.SkillSetZone.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173/")
@@ -17,10 +20,12 @@ import java.io.IOException;
 public class PublicController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PublicController(UserService userService) {
+    public PublicController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     // Signup endpoint
@@ -67,5 +72,11 @@ public class PublicController {
         } catch (AuthenticationFailedException e) {
             return ResponseEntity.status(401).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/all")
+    public List<User> getAllUsers() {
+        List<User> users= new ArrayList<>(userRepository.findAll());
+        return users;
     }
 }

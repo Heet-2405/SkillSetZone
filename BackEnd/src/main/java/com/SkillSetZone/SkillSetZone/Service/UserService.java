@@ -7,12 +7,14 @@ import com.SkillSetZone.SkillSetZone.Repo.UserRepository;
 import com.SkillSetZone.SkillSetZone.controller.AuthenticationFailedException;
 import com.SkillSetZone.SkillSetZone.controller.EmailAlreadyInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -105,18 +107,25 @@ public class UserService {
     }
 
     public Map<String, Object> getUserProfile(String name) {
-        Optional<User> user = userRepository.findByName(name);
-        String email = user.get().getEmail();
+        Optional<User> userOptional = userRepository.findByName(name);
+
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        User user = userOptional.get(); // Now safe to call get()
+        String email = user.getEmail();
 
         Map<String, Object> userData = new HashMap<>();
-        userData.put("name", user.get().getName());
-        userData.put("email", user.get().getEmail());
-        userData.put("image", user.get().getImage()); // Assuming base64-encoded image string
-        userData.put("collegeBranch", user.get().getCollegeBranch());
+        userData.put("name", user.getName());
+        userData.put("email", email);
+        userData.put("image", user.getImage());
+        userData.put("collegeBranch", user.getCollegeBranch());
         userData.put("skill", skillRepository.findAllByEmail(email));
-        userData.put("bio", user.get().getBio());
+        userData.put("bio", user.getBio());
 
         return userData;
     }
+
 
 }

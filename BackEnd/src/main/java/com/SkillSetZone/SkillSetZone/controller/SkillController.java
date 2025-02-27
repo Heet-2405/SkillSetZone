@@ -29,12 +29,13 @@ public class SkillController {
     public ResponseEntity<Void> handleOptions() {
         return ResponseEntity.ok().build(); // Respond with HTTP 200 OK
     }
+
     @PostMapping("/create")
     public Skill createSkill(
             @RequestPart(value = "file", required = false) MultipartFile image,
             @RequestParam("title") String title,
             @RequestParam("description") String description,
-            @RequestParam("tool") String tool) throws IOException {
+            @RequestParam(value = "tool",required = false) String tool) throws IOException {
         return skillService.addSkill(title, description, image, 0,tool);
     }
 
@@ -44,10 +45,11 @@ public class SkillController {
             @RequestPart(value = "file", required = false) MultipartFile image,
             @RequestParam("title") String title,
             @RequestParam("description") String description,
-            @RequestParam("likes") int likes,
-            @RequestParam("tool") String tool) throws IOException {
-        return skillService.updateSkill(id, title, description, image, likes,tool);
+            @RequestParam(value = "likes", required = false, defaultValue = "0") int likes,  // Default value
+            @RequestParam(value = "tool", required = false) String tool) throws IOException {
+        return skillService.updateSkill(id, title, description, image, likes, tool);
     }
+
 
     @DeleteMapping("/delete/{id}")
     public String deleteSkill(@PathVariable String id) {

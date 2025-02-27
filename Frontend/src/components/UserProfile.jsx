@@ -25,25 +25,26 @@ const UserProfile = () => {
       });
   
       if (!response.ok) {
-        const errorMessage = await response.text(); // Capture the error message from the server
+        if (response.status === 404) {
+          throw new Error("User not found");
+        }
+        const errorMessage = await response.text();
         throw new Error(`Failed to fetch user profile: ${errorMessage}`);
       }
   
       const data = await response.json();
-      console.log("User data:", data); // Debugging line to inspect the full user data
-
       setUser({
         ...data,
-        profileImage: data.image // Format it as base64 if necessary
+        profileImage: data.image
           ? `data:image/jpeg;base64,${data.image}`
           : defaultProfileImage,
       });
     } catch (error) {
-      console.error("Error fetching user profile:", error);
-      navigate("/login");
+      console.error("Error fetching user profile:", error.message);
+      navigate("/login"); // Redirect or show an error message
     }
   };
-
+  
   return (
     <div className="user-profile-container">
     
