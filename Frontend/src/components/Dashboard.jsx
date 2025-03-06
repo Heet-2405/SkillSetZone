@@ -109,13 +109,13 @@ const Dashboard = () => {
   }, [authToken, navigate, fetchSkills]);
 
   return (
-    <div className="dashboard-container">
+    <div className="dash-container">
       {/* Left Sidebar (30%) */}
-      <div className="sidebar">
-        <h2>Top Skills</h2>
-        <ul>
+      <div className="dash-sidebar">
+        <h2 className="dash-sidebar-title">Top Skills</h2>
+        <ul className="dash-skill-list">
           {topSkills.map((skill, index) => (
-            <li key={index} onClick={() => handleSkillClick(skill)}>
+            <li key={index} className="dash-skill-item" onClick={() => handleSkillClick(skill)}>
               {skill}
             </li>
           ))}
@@ -123,42 +123,44 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content (70%) */}
-      <div className="main-content">
-        <h1 className="dashboard-header">
-          {selectedSkill ? `Users with ${selectedSkill}` : "Dashboard"}
-        </h1>
-        {selectedSkill && (
-          <button className="back-button" onClick={resetFilter}>
-            Back to Dashboard
-          </button>
-        )}
+      <div className="dash-main-content">
+        <div className="dash-header">
+          <h1 className="dash-title">
+            {selectedSkill ? `Users with ${selectedSkill}` : "Dashboard"}
+          </h1>
+          {selectedSkill && (
+            <button className="dash-back-button" onClick={resetFilter}>
+              Back to Dashboard
+            </button>
+          )}
+        </div>
 
-        <div className="skills-list">
+        <div className="dash-skills-container">
           {filteredSkills.length > 0 ? (
             filteredSkills.map((skill) => (
-              <div key={skill.id} className="skill-card">
-                <div className="user-info" onClick={() => handleUsernameClick(skill.username)}>
-                  <img src={skill.profileImage} alt="User Profile" className="profile-image" />
-                  <div>
-                    <h2>{skill.username}</h2>
-                    <p className="user-email">{skill.email}</p>
+              <div key={skill.id} className="dash-skill-card">
+                <div className="dash-user-row" onClick={() => handleUsernameClick(skill.username)}>
+                  <img src={skill.profileImage} alt="User Profile" className="dash-profile-pic" />
+                  <div className="dash-user-details">
+                    <h2 className="dash-username">{skill.username}</h2>
+                    <p className="dash-user-email">{skill.email}</p>
                   </div>
                 </div>
-                <hr className="skill-divider" />
-                <h3>{skill.title}</h3>
-                {skill.tool && <h4>Tool: {skill.tool}</h4>}
-                <p>{skill.description}</p>
-                {skill.imageSrc && <img src={skill.imageSrc} alt={skill.title} className="skill-image" />}
-                <div className="likes-section">
-                  <p className="like-count">Likes: {skill.likes}</p>
-                  <button className="like-button" onClick={() => toggleLike(skill.id)}>
-                    {skill.hasLiked ? "UnLike" : "Like"}
+                <hr className="dash-divider" />
+                <h3 className="dash-skill-title">{skill.title}</h3>
+                {skill.tool && <h4 className="dash-skill-tool">Tool: {skill.tool}</h4>}
+                <p className="dash-skill-description">{skill.description}</p>
+                {skill.imageSrc && <img src={skill.imageSrc} alt={skill.title} className="dash-skill-image" />}
+                <div className="dash-likes-row">
+                  <p className="dash-likes-count">Likes: {skill.likes}</p>
+                  <button className="dash-like-button" onClick={() => toggleLike(skill.id)}>
+                    {skill.hasLiked ? "Unlike" : "Like"}
                   </button>
                 </div>
               </div>
             ))
           ) : (
-            <p>No users found with this skill.</p>
+            <p className="dash-empty-message">No users found with this skill.</p>
           )}
         </div>
       </div>

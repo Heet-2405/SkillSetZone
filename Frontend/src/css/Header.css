@@ -1,108 +1,181 @@
-/* Header container */
+/* Header.css - Modern styling for SkillSetZone header */
+
+:root {
+  --primary-color: #4a6bff;
+  --primary-dark: #3a56d4;
+  --secondary-color: #ff6b6b;
+  --accent-color: #5ce1e6;
+  --text-color: #333333;
+  --light-bg: #f8f9fa;
+  --white: #ffffff;
+  --gray-light: #e9ecef;
+  --gray: #adb5bd;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 40px; /* Reduced padding for a more compact feel */
-    background-color: #007bff;
-    color: white;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--white);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo-container {
+  flex: 0 0 auto;
+  margin-right: 1rem;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: var(--transition);
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.search-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin: 0 1rem;
+  max-width: 500px;
+  min-width: 200px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--gray-light);
+  border-radius: 25px 0 0 25px;
+  font-size: 1rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
+}
+
+.search-container .button {
+  border-radius: 0 25px 25px 0;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: 2px solid var(--primary-color);
+  padding: 0.75rem 1.5rem;
+}
+
+.search-container .button:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.nav {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  background-color: var(--gray-light);
+  color: var(--text-color);
+}
+
+.button:hover {
+  background-color: var(--gray);
+  transform: translateY(-2px);
+}
+
+.nav .button:nth-child(1) {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.nav .button:nth-child(1):hover {
+  background-color: var(--primary-dark);
+}
+
+.nav .button:nth-child(3) {
+  background-color: var(--secondary-color);
+  color: var(--white);
+}
+
+.nav .button:nth-child(3):hover {
+  background-color: #e55c5c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+  .header {
+    padding: 1rem;
   }
   
-  /* Logo Container */
-  .logo-container {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Reduced gap between logo and other elements */
-  }
-  
-  .logo {
-    font-size: 24px; /* Slightly smaller font size for logo */
-    font-weight: 600;
-    letter-spacing: 1px;
-    cursor: pointer;
-    text-transform: uppercase;
-  }
-  
-  /* Search Container */
-  .search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 35%; /* Reduced width for a more compact search bar */
-  }
-  
-  /* Search Input */
-  .search-input {
-    width: 70%;  /* Narrowed the input */
-    padding: 8px 15px; /* Reduced padding for a more sleek design */
-    border-radius: 25px; /* Slightly less rounded for a more professional feel */
-    border: 1px solid #ccc;
-    font-size: 14px; /* Slightly smaller font for input */
-    outline: none;
-    background-color: #fff;
-    transition: all 0.3s ease;
-  }
-  
-  /* Search Input Focus Effect */
-  .search-input:focus {
-    border-color: #0056b3;
-    box-shadow: 0 0 4px rgba(0, 86, 179, 0.5);
-  }
-  
-  /* Navigation */
-  .nav {
-    display: flex;
-    gap: 15px; /* Slightly reduced gap for tighter layout */
-    align-items: center;
-  }
-  
-  /* Button Styling */
   .button {
-    background-color: transparent;
-    border: 1px solid white;
-    color: white;
-    padding: 8px 18px; /* Reduced button padding */
-    border-radius: 25px; /* Less rounded, more subtle */
-    font-size: 14px; /* Smaller font for a more professional look */
-    font-weight: 500;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    transition: all 0.3s ease;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .header {
+    flex-wrap: wrap;
   }
   
-  /* Hover Effect */
-  .button:hover {
-    background-color: white;
-    color: #007bff;
-    transform: translateY(-1px); /* Slight hover effect */
+  .logo-container {
+    flex: 1;
+    margin-bottom: 0.5rem;
   }
   
-  /* Active/Press Effect */
-  .button:active {
-    transform: translateY(1px);
-    background-color: #0056b3;
-    color: white;
+  .search-container {
+    order: 3;
+    flex: 1 0 100%;
+    margin: 0.5rem 0;
+    max-width: 100%;
   }
   
-  /* Button for Logout */
-  .button.logout {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: white;
+  .nav {
+    flex: 0 0 auto;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .nav {
+    overflow-x: auto;
+    padding-bottom: 5px;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
   
-  .button.logout:hover {
-    background-color: white;
-    color: #dc3545;
+  .nav::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
   }
   
-  /* Hide search input and nav for specific pages */
-  .hide-elements {
-    display: none;
+  .button {
+    flex-shrink: 0;
   }
-  
+}

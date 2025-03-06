@@ -19,92 +19,110 @@
   background-color: var(--background-color);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  padding: 20px;
+  min-height: 100vh;
 }
 
-.profile-page .profile-container {
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 30px;
-  background-color: var(--card-background);
-  box-shadow: var(--box-shadow);
-  border-radius: var(--border-radius);
+/* Layout with 30/70 split */
+.profile-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+/* Left side - Profile (30%) */
+.profile-sidebar {
+  flex: 0 0 30%;
+  max-width: 30%;
   transition: var(--transition);
 }
 
-.profile-page .profile-container:hover {
+.profile-card {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: var(--transition);
+}
+
+.profile-card:hover {
   transform: translateY(-5px);
 }
 
-.profile-page .profile-container h2 {
-  margin-bottom: 20px;
-  font-size: 28px;
-  color: var(--text-color);
-  text-align: center;
-  border-bottom: 2px solid var(--border-color);
-  padding-bottom: 10px;
+/* Right side - Skills (70%) */
+.skills-main {
+  flex: 0 0 70%;
+  max-width: 70%;
 }
 
-.profile-page .profile-image {
-  width: 150px;
-  height: 150px;
+/* Profile Image */
+.profile-image {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
   margin: 0 auto 20px;
   display: block;
+  border: 3px solid var(--primary-color);
 }
 
-.profile-page .profile-info {
+/* Profile Info */
+.profile-info {
   text-align: left;
-  margin: 20px 0;
+  margin-top: 15px;
 }
 
-.profile-page .profile-info p {
+.profile-info p {
   margin: 8px 0;
-  font-size: 18px;
+  font-size: 16px;
   color: var(--text-muted);
 }
 
-.profile-page .edit-form {
+/* Edit Form */
+.edit-form {
   text-align: left;
 }
 
-.profile-page .edit-form label {
+.edit-form label {
   display: block;
   margin-bottom: 5px;
   font-weight: 600;
   color: var(--text-color);
+  font-size: 14px;
 }
 
-.profile-page .edit-form input,
-.profile-page .edit-form select {
+.edit-form input,
+.edit-form select {
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  margin-bottom: 15px;
+  padding: 8px;
+  font-size: 14px;
+  margin-bottom: 12px;
   border: 1px solid var(--border-color);
   border-radius: 5px;
   box-sizing: border-box;
   transition: var(--transition);
 }
 
-.profile-page .edit-form input:focus,
-.profile-page .edit-form select:focus {
+.edit-form input:focus,
+.edit-form select:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
-.profile-page .button-group {
+/* Buttons */
+.button-group {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
-.profile-page .button-group button {
+.button-group button {
   flex: 1;
-  padding: 10px 15px;
-  font-size: 16px;
+  padding: 8px 15px;
+  font-size: 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -112,31 +130,216 @@
   margin: 0 5px;
 }
 
-.profile-page .button-group button:first-child {
+.button-group button:first-child {
   background-color: var(--success-color);
   color: #fff;
 }
 
-.profile-page .button-group button:first-child:hover {
+.button-group button:first-child:hover {
   background-color: var(--success-hover);
 }
 
-.profile-page .button-group button:last-child {
+.button-group button:last-child {
   background-color: var(--danger-color);
   color: #fff;
 }
 
-.profile-page .button-group button:last-child:hover {
+.button-group button:last-child:hover {
   background-color: var(--danger-hover);
 }
 
-.profile-page .edit-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
+.edit-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 8px 0;
   background-color: var(--primary-color);
   border: none;
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   border-radius: 5px;
   cursor: pointer;
   transition: var(--transition);
+}
+
+.edit-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Headers */
+.profile-sidebar h2,
+.skills-main h2 {
+  color: var(--text-color);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+/* Skills Header with Add Button */
+.skills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: var(--card-background);
+  padding: 15px 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.skills-header h2 {
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+.add-skill-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 14px;
+}
+
+.add-skill-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Skills List - Full Width */
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.skill-item {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  transition: var(--transition);
+  width: 100%;
+}
+
+.skill-item:hover {
+  transform: translateY(-3px);
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.skill-header h4 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-color);
+}
+
+.skill-tool {
+  background-color: rgba(0, 123, 255, 0.1);
+  color: var(--primary-color);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.skill-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.skill-description {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.skill-image-container {
+  flex: 0 0 200px;
+}
+
+.skill-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.skill-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.update-skill-btn,
+.delete-skill-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 14px;
+}
+
+.update-skill-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.update-skill-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.delete-skill-btn {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.delete-skill-btn:hover {
+  background-color: var(--danger-hover);
+}
+
+.no-skills {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+  box-shadow: var(--box-shadow);
+  margin-top: 20px;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .profile-layout {
+    flex-direction: column;
+  }
+  
+  .profile-sidebar,
+  .skills-main {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .skill-content {
+    flex-direction: column;
+  }
+  
+  .skill-image-container {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
