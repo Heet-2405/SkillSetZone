@@ -33,7 +33,8 @@ public class SpringSecurity {
                 .cors().and() // Enable CORS
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/skills/**").authenticated() // Apply security to your API endpoints
+                        .requestMatchers("/api/skills/**").authenticated()
+                        .requestMatchers("/api/expr/**").authenticated()// Apply security to your API endpoints
                         .anyRequest().permitAll()) // Allow other requests without authentication
                 .httpBasic(); // You can replace this with JWT or other mechanisms if needed
 

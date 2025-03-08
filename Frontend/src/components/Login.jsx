@@ -14,6 +14,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(email, password);
+      localStorage.setItem("email", email);
       navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'An error occurred during login.');

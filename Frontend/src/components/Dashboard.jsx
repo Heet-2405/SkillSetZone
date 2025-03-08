@@ -3,6 +3,34 @@ import { useNavigate } from "react-router-dom";
 import "/src/css/Dashboard.css"; // Ensure correct path
 import defaultProfileImage from "/src/components/download.png";
 
+// Function to detect and convert links in text
+const processTextWithLinks = (text, className = "link-highlight") => {
+  if (!text) return "";
+  
+  // Regex to detect URLs
+  const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)/g;
+  
+  return text.split(urlRegex).map((part, index) => {
+    if (part && (part.startsWith('http') || part.startsWith('www.'))) {
+      const href = part.startsWith('www.') ? `http://${part}` : part;
+      return (
+        <a 
+          key={index} 
+          href={href} 
+          className={className}
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(href, '_blank');
+          }}
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+};
+
 const topSkills = [
   "Video Editing",
   "Image Editing",
@@ -149,7 +177,9 @@ const Dashboard = () => {
                 <hr className="dash-divider" />
                 <h3 className="dash-skill-title">{skill.title}</h3>
                 {skill.tool && <h4 className="dash-skill-tool">Tool: {skill.tool}</h4>}
-                <p className="dash-skill-description">{skill.description}</p>
+                <p className="dash-skill-description">
+                  {processTextWithLinks(skill.description, "dash-link-highlight")}
+                </p>
                 {skill.imageSrc && <img src={skill.imageSrc} alt={skill.title} className="dash-skill-image" />}
                 <div className="dash-likes-row">
                   <p className="dash-likes-count">Likes: {skill.likes}</p>

@@ -5,6 +5,51 @@ import "/src/css/Skill.css"; // Ensure CSS path is correct
 import defaultProfileImage from "/src/components/download.png"; // Default profile image
 import "/src/css/SearchResult.css";
 
+// Function to detect and convert URLs to clickable links
+const LinkifyText = ({ text }) => {
+  if (!text) return null;
+  
+  // Regular expression to detect URLs
+  // This regex matches common URL patterns starting with http://, https://, or www.
+  const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)/g;
+  
+  // Split the text by URLs and create an array of text and link elements
+  const parts = text.split(urlRegex);
+  const matches = text.match(urlRegex) || [];
+  
+  const result = [];
+  let i = 0;
+  let j = 0;
+  
+  // Build the result array with text and link elements
+  while (i < parts.length) {
+    if (parts[i]) {
+      result.push(<span key={`text-${i}`}>{parts[i]}</span>);
+    }
+    
+    if (j < matches.length) {
+      const url = matches[j];
+      const href = url.startsWith('www.') ? `https://${url}` : url;
+      
+      result.push(
+        <a 
+          key={`link-${j}`} 
+          href={href} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="detected-link"
+        >
+          {url}
+        </a>
+      );
+      j++;
+    }
+    i++;
+  }
+  
+  return result;
+};
+
 const SearchResults = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -86,7 +131,9 @@ const SearchResults = () => {
               {/* Show More / Show Less functionality */}
               {expandedSkill === skill.id ? (
                 <>
-                  <p>{skill.description}</p>
+                  <div className="skill-description">
+                    <LinkifyText text={skill.description} />
+                  </div>
                   {skill.imageSrc && <img src={skill.imageSrc} alt={skill.title} className="skill-image" />}
                   <button onClick={() => setExpandedSkill(null)} className="show-more-btn">Show Less</button>
                 </>

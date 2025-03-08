@@ -2,10 +2,39 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "/src/css/Profile.css";
 
+// Function to detect and convert links in text
+const processTextWithLinks = (text, className = "link-highlight") => {
+  if (!text) return "";
+  
+  // Regex to detect URLs
+  const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)/g;
+  
+  return text.split(urlRegex).map((part, index) => {
+    if (part && (part.startsWith('http') || part.startsWith('www.'))) {
+      const href = part.startsWith('www.') ? `http://${part}` : part;
+      return (
+        <a 
+          key={index} 
+          href={href} 
+          className={className}
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(href, '_blank');
+          }}
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+};
+
 function Profile() {
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [skills, setSkills] = useState([]);
+  const [experiences, setExperiences] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -15,6 +44,12 @@ function Profile() {
     bio: "",
     image: null,
   });
+  const [experienceData, setExperienceData] = useState({
+    experience: "",
+    image: null,
+  });
+  const [showExperienceForm, setShowExperienceForm] = useState(false);
+  const [experiencePreviewImage, setExperiencePreviewImage] = useState(null);
   
   const authToken = localStorage.getItem("auth");
   const navigate = useNavigate();
@@ -27,6 +62,7 @@ function Profile() {
     
     fetchUserProfile();
     fetchUserSkills();
+    fetchUserExperiences();
   }, [authToken, navigate]);
 
   const fetchUserProfile = async () => {
@@ -70,8 +106,27 @@ function Profile() {
     }
   };
 
+  const fetchUserExperiences = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/expr/all", {
+        method: "GET",
+        headers: { Authorization: `Basic ${authToken}` },
+      });
+      if (!response.ok) throw new Error("Failed to fetch user experiences");
+
+      const data = await response.json();
+      setExperiences(data);
+    } catch (error) {
+      console.error("Error fetching user experiences:", error);
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleExperienceChange = (e) => {
+    setExperienceData({ ...experienceData, [e.target.name]: e.target.value });
   };
 
   const handleImageChange = (e) => {
@@ -81,6 +136,16 @@ function Profile() {
       reader.onloadend = () => setPreviewImage(reader.result);
       reader.readAsDataURL(file);
       setFormData({ ...formData, image: file });
+    }
+  };
+
+  const handleExperienceImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setExperiencePreviewImage(reader.result);
+      reader.readAsDataURL(file);
+      setExperienceData({ ...experienceData, image: file });
     }
   };
 
@@ -106,6 +171,30 @@ function Profile() {
       fetchUserProfile();
     } catch (error) {
       console.error("Error updating user profile:", error);
+    }
+  };
+
+  const handleAddExperience = async () => {
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("experience", experienceData.experience);
+      if (experienceData.image) formDataToSend.append("file", experienceData.image);
+
+      const response = await fetch("http://localhost:8080/api/expr/create", {
+        method: "POST",
+        headers: { Authorization: `Basic ${authToken}` },
+        body: formDataToSend, 
+      });
+      if (!response.ok) throw new Error("Failed to add experience");
+
+      alert("Experience added successfully!");
+      setShowExperienceForm(false);
+      setExperienceData({ experience: "", image: null });
+      setExperiencePreviewImage(null);
+      fetchUserExperiences();
+    } catch (error) {
+      console.error("Error adding experience:", error);
+      alert("Error adding experience: " + error.message);
     }
   };
 
@@ -142,6 +231,32 @@ function Profile() {
     } catch (error) {
       console.error("Error deleting skill:", error);
       alert("Error deleting skill: " + error.message);
+    }
+  };
+
+  // Delete an experience
+  const handleDeleteExperience = async (experienceId) => {
+    if (!confirm("Are you sure you want to delete this experience?")) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/expr/delete/${experienceId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Basic ${authToken}` },
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to delete experience");
+      
+      // Refresh experiences list after deletion
+      fetchUserExperiences();
+      alert("Experience deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting experience:", error);
+      alert("Error deleting experience: " + error.message);
     }
   };
 
@@ -189,7 +304,7 @@ function Profile() {
               ) : (
                 <div className="profile-info">
                   <p><strong>Name:</strong> {user.name}</p>
-                  <p><strong>Bio:</strong> {user.bio}</p>
+                  <p><strong>Bio:</strong> {processTextWithLinks(user.bio)}</p>
                   <p><strong>Email:</strong> {user.email}</p>
                   <p><strong>Branch:</strong> {user.collegeBranch}</p>
                   <button className="edit-btn" onClick={() => setEditMode(true)}>
@@ -203,63 +318,155 @@ function Profile() {
           )}
         </div>
 
-        {/* Right side - Skills (70%) */}
-        <div className="skills-main">
-          <div className="skills-header">
-            <h2>Skills</h2>
-            <button className="add-skill-btn" onClick={navigateToAddSkill}>
-              Add Skill
-            </button>
-          </div>
+        {/* Right side - Content (70%) */}
+        <div className="content-main">
+          {/* Skills Section */}
+          <div className="section-container">
+            <div className="section-header">
+              <h2>Skills</h2>
+              <button className="add-btn" onClick={navigateToAddSkill}>
+                Add Skill
+              </button>
+            </div>
 
-          {/* Skills List - Full Width */}
-          {skills.length > 0 ? (
-            <div className="skills-list">
-              {skills.map((skill) => (
-                <div key={skill.id} className="skill-item">
-                  <div className="skill-header">
-                    <h4>{skill.title}</h4>
-                    {skill.tool && <span className="skill-tool">{skill.tool}</span>}
-                  </div>
-                  
-                  <div className="skill-content">
-                    <div className="skill-description">
-                      <p>{skill.description}</p>
+            {/* Skills List */}
+            {skills.length > 0 ? (
+              <div className="items-list">
+                {skills.map((skill) => (
+                  <div key={skill.id} className="item-card">
+                    <div className="item-header">
+                      <h4>{skill.title}</h4>
+                      {skill.tool && <span className="item-tag">{skill.tool}</span>}
                     </div>
                     
-                    {skill.image && (
-                      <div className="skill-image-container">
-                        <img
-                          src={`data:image/jpeg;base64,${skill.image}`}
-                          alt={skill.title}
-                          className="skill-image"
-                        />
+                    <div className="item-content">
+                      <div className="item-description">
+                        <p>{processTextWithLinks(skill.description)}</p>
                       </div>
-                    )}
+                      
+                      {skill.image && (
+                        <div className="item-image-container">
+                          <img
+                            src={`data:image/jpeg;base64,${skill.image}`}
+                            alt={skill.title}
+                            className="item-image"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="item-actions">
+                      <button 
+                        className="update-btn"
+                        onClick={() => navigateToUpdateSkill(skill.id)}
+                      >
+                        Update
+                      </button>
+                      <button 
+                        className="delete-btn"
+                        onClick={() => handleDeleteSkill(skill.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
+                ))}
+              </div>
+            ) : (
+              <div className="no-items">
+                <p>No skills added yet. Add your first skill!</p>
+              </div>
+            )}
+          </div>
+
+          {/* Experiences Section */}
+          <div className="section-container">
+            <div className="section-header">
+              <h2>Experiences</h2>
+              <button className="add-btn" onClick={() => setShowExperienceForm(true)}>
+                Add Experience
+              </button>
+            </div>
+
+            {/* Experience Form */}
+            {showExperienceForm && (
+              <div className="form-container">
+                <h3>Add New Experience</h3>
+                <div className="experience-form">
+                  <label>Experience Description:</label>
+                  <textarea 
+                    name="experience" 
+                    value={experienceData.experience} 
+                    onChange={handleExperienceChange}
+                    rows="4"
+                    placeholder="Describe your experience..."
+                  />
+
+                  <label>Image (Optional):</label>
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleExperienceImageChange} 
+                  />
                   
-                  <div className="skill-actions">
-                    <button 
-                      className="update-skill-btn"
-                      onClick={() => navigateToUpdateSkill(skill.id)}
-                    >
-                      Update
-                    </button>
-                    <button 
-                      className="delete-skill-btn"
-                      onClick={() => handleDeleteSkill(skill.id)}
-                    >
-                      Delete
+                  {experiencePreviewImage && (
+                    <div className="image-preview">
+                      <img src={experiencePreviewImage} alt="Preview" />
+                    </div>
+                  )}
+
+                  <div className="button-group">
+                    <button onClick={handleAddExperience}>Save Experience</button>
+                    <button onClick={() => {
+                      setShowExperienceForm(false);
+                      setExperienceData({ experience: "", image: null });
+                      setExperiencePreviewImage(null);
+                    }}>
+                      Cancel
                     </button>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="no-skills">
-              <p>No skills added yet. Add your first skill!</p>
-            </div>
-          )}
+              </div>
+            )}
+
+            {/* Experiences List */}
+            {experiences.length > 0 ? (
+              <div className="items-list">
+                {experiences.map((exp) => (
+                  <div key={exp.id} className="item-card">
+                    <div className="item-content">
+                      <div className="item-description">
+                        <p>{processTextWithLinks(exp.experience)}</p>
+                      </div>
+                      
+                      {exp.image && (
+                        <div className="item-image-container">
+                          <img
+                            src={`data:image/jpeg;base64,${exp.image}`}
+                            alt="Experience"
+                            className="item-image"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="item-actions">
+                      <button 
+                        className="delete-btn"
+                        onClick={() => handleDeleteExperience(exp.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="no-items">
+                <p>No experiences added yet. Share your first experience!</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
