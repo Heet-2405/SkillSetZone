@@ -7,6 +7,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState(""); // State to track search input
   const [userName, setUserName] = useState(""); // State to store user name
+  const [isAdmin, setIsAdmin] = useState(false); // State to check if user is admin
 
   // Pages where specific elements should be hidden (e.g., Signup and Login pages)
   const hideElements = location.pathname === "/signup" || location.pathname === "/";
@@ -45,11 +46,17 @@ const Header = () => {
     };
     
     fetchUserProfile();
+    
+    // Check if user is admin
+    const userRole = localStorage.getItem("auth");
+    setIsAdmin(userRole === "admin");
   }, [isAuthenticated]);
 
   // Handle logout
   const handleLogout = () => {
     localStorage.removeItem("auth");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("email");
     setUserName("");
     navigate("/");
   };
@@ -65,7 +72,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo-container">
-        <div className="logo" onClick={() => navigate("/")}>SkillSetZone</div>
+        <div className="logo" onClick={() => navigate(isAdmin ? "/admin" : "/")}>SkillSetZone</div>
       </div>
 
       {/* Search section */}
@@ -86,15 +93,21 @@ const Header = () => {
       {!hideElements && (
         <nav className="nav">
           {isAuthenticated ? (
-            <>
-              <div className="username-display">
-                <span>{userName}</span>
-              </div>
-              <button className="button" onClick={() => navigate("/dashboard")}>Dashboard</button>
-              <button className="button" onClick={() => navigate("/skills")}>Skills</button>
-              <button className="button" onClick={() => navigate("/profile")}>Profile</button>
+            isAdmin ? (
+              // Admin navigation - only show logout button
               <button className="button" onClick={handleLogout}>Logout</button>
-            </>
+            ) : (
+              // Regular user navigation - show all buttons
+              <>
+                <div className="username-display">
+                
+                </div>
+                <button className="button" onClick={() => navigate("/dashboard")}>Dashboard</button>
+                
+                <button className="button" onClick={() => navigate("/profile")}>{userName}</button>
+                <button className="button" onClick={handleLogout}>Logout</button>
+              </>
+            )
           ) : (
             <>
               <button className="button" onClick={() => navigate("/login")}>Login</button>

@@ -12,9 +12,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     localStorage.removeItem('auth');
     e.preventDefault();
+    
+    // Check for admin credentials
+    if (email === 'admin' && password === 'admin') {
+      localStorage.setItem("auth", "admin");
+      navigate('/admin');
+      return;
+    }
+    
     try {
       await login(email, password);
       localStorage.setItem("email", email);
+      localStorage.setItem("userRole", "user");
       navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'An error occurred during login.');
@@ -27,10 +36,10 @@ const Login = () => {
         <h2>Login</h2>
         {error && <div className="error-message">{error}</div>}
         <input
-          type="email"
+          type="text" // Changed from email to text to allow "admin" as username
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder="Email or Username"
           required
           className="input-field"
         />

@@ -10,6 +10,7 @@ import Skill from './components/Skill.jsx';
 import SearchResults from './components/SearchResults.jsx';
 import Profile from './components/Profile.jsx';
 import UserProfile from './components/UserProfile.jsx';
+import Admin from './components/Admin.jsx';
 const App = () => {
   const layoutStyles = {
     minHeight: '100vh',
@@ -64,13 +65,23 @@ const App = () => {
               }
             />
             <Route
-              path="/profile/:username" // Add route for UserProfile with dynamic username
+              path="/profile/:username" 
               element={
                 <ProtectedRoute>
                   <UserProfile />
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+            
           </Routes>
         </main>
         <Footer />

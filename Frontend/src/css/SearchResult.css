@@ -1,3 +1,5 @@
+Updated SearchResult.css
+
 :root {
   --primary-color: #007bff;
   --background-color: #f8f9fa;
@@ -45,33 +47,66 @@ h2 {
   transform: scale(1.02);
 }
 
-.user-info {
+/* Updated user info styles for better alignment */
+.user-info-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-.profile-image {
+.user-profile-image {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+  flex-shrink: 0;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.user-name {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: var(--text-color);
+  line-height: 1.2;
 }
 
 .user-email {
+  margin: 0;
   color: var(--text-muted);
   font-size: 14px;
+  line-height: 1.2;
 }
 
-h3 {
+.skill-title {
   color: var(--primary-color);
+  margin: 10px 0 5px 0;
+  font-size: 20px;
+}
+
+.skill-tool {
+  font-size: 16px;
+  color: var(--text-muted);
   margin: 5px 0;
 }
 
-p {
-  color: var(--text-muted);
+.skill-likes {
   font-size: 16px;
+  font-weight: bold;
+  color: var(--text-color);
+  margin: 10px 0;
+}
+
+.skill-description {
+  margin: 15px 0;
+  color: var(--text-color);
+  line-height: 1.5;
 }
 
 .skill-image {
@@ -82,9 +117,22 @@ p {
   margin-top: 10px;
 }
 
-h3.likes {
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--text-color);
+.show-more-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
   margin-top: 10px;
+  transition: var(--transition);
+}
+
+.show-more-btn:hover {
+  opacity: 0.9;
+}
+
+.detected-link {
+  color: var(--primary-color);
+  text-decoration: underline;
 }

@@ -117,16 +117,16 @@ const SearchResults = () => {
         <div className="skills-list">
           {skills.map((skill) => (
             <div key={skill.id} className="skill-card">
-              <div className="user-info">
-                <img src={skill.profileImage} alt="User Profile" className="profile-image" />
-                <div>
-                  <h2>{skill.username}</h2>
+              <div className="user-info-container">
+                <img src={skill.profileImage} alt="User Profile" className="user-profile-image" />
+                <div className="user-details">
+                  <h2 className="user-name">{skill.username}</h2>
                   <p className="user-email">{skill.email}</p>
                 </div>
               </div>
-              <h3>{skill.title}</h3>
-              {skill.tool ? <h4>Tool: {skill.tool}</h4> : null}
-              <h3>Likes: {skill.likes}</h3>
+              <h3 className="skill-title">{skill.title}</h3>
+              {skill.tool ? <h4 className="skill-tool">Tool: {skill.tool}</h4> : null}
+              <h3 className="skill-likes">Likes: {skill.likes}</h3>
 
               {/* Show More / Show Less functionality */}
               {expandedSkill === skill.id ? (

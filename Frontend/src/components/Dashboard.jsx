@@ -31,21 +31,28 @@ const processTextWithLinks = (text, className = "link-highlight") => {
   });
 };
 
-const topSkills = [
-  "Video Editing",
-  "Image Editing",
-  "Poster Design",
-  "Competitive Programming",
-  "UI/UX Design",
-  "Web Development",
-];
-
 const Dashboard = () => {
   const [skills, setSkills] = useState([]);
   const [filteredSkills, setFilteredSkills] = useState([]);
   const [selectedSkill, setSelectedSkill] = useState(null);
+  const [topSkills, setTopSkills] = useState([]);
   const authToken = localStorage.getItem("auth");
   const navigate = useNavigate();
+
+  const fetchTopSkills = useCallback(async () => {
+    try {
+      // Using the public endpoint without authentication
+      const response = await fetch("http://localhost:8080/admin/skill/all");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setTopSkills(data.map(skill => skill.skillName));
+    } catch (error) {
+      console.error("Error fetching top skills:", error);
+      setTopSkills([]);
+    }
+  }, []);
 
   const fetchSkills = useCallback(async () => {
     const headers = { Authorization: `Basic ${authToken}` };
@@ -106,7 +113,7 @@ const Dashboard = () => {
       setFilteredSkills((prevSkills) =>
         prevSkills.map((skill) =>
           skill.id === skillId
-            ? { ...skill, likes: skill.hasLiked ? skill.likes + 1 : skill.likes - 1, hasLiked: !skill.hasLiked }
+            ? { ...skill, likes: skill.hasLiked ? skill.likes - 1 : skill.likes + 1, hasLiked: !skill.hasLiked }
             : skill
         )
       );
@@ -128,13 +135,23 @@ const Dashboard = () => {
     setFilteredSkills(skills);
   };
 
+  // Poll for top skills changes every 30 seconds
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchTopSkills();
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(intervalId);
+  }, [fetchTopSkills]);
+
   useEffect(() => {
     if (!authToken) {
       navigate("/login");
     } else {
       fetchSkills();
+      fetchTopSkills();
     }
-  }, [authToken, navigate, fetchSkills]);
+  }, [authToken, navigate, fetchSkills, fetchTopSkills]);
 
   return (
     <div className="dash-container">
@@ -142,11 +159,15 @@ const Dashboard = () => {
       <div className="dash-sidebar">
         <h2 className="dash-sidebar-title">Top Skills</h2>
         <ul className="dash-skill-list">
-          {topSkills.map((skill, index) => (
-            <li key={index} className="dash-skill-item" onClick={() => handleSkillClick(skill)}>
-              {skill}
-            </li>
-          ))}
+          {topSkills.length > 0 ? (
+            topSkills.map((skill, index) => (
+              <li key={index} className="dash-skill-item" onClick={() => handleSkillClick(skill)}>
+                {skill}
+              </li>
+            ))
+          ) : (
+            <li className="dash-skill-item-empty">No top skills available</li>
+          )}
         </ul>
       </div>
 
