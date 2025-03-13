@@ -121,7 +121,8 @@ public class SkillService {
             skillData.put("username", username); // Replace email with username
             skillData.put("image", skill.getImage() != null ? Base64.getEncoder().encodeToString(skill.getImage()) : null);
             skillData.put("profileImage", profileImage != null ? Base64.getEncoder().encodeToString(profileImage) : null); // Convert profile image
-            skillData.put("email",user.get().getEmail());
+            skillData.put("email", user.map(User::getEmail).orElse(null));
+
             response.add(skillData);
         }
 
