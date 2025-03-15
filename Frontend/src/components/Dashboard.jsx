@@ -82,7 +82,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error fetching skills:", error);
       if (error.message.includes("401")) {
-        navigate("/login");
+        navigate("/");
       } else {
         alert("Something went wrong. Please try again later.");
       }
@@ -146,7 +146,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!authToken) {
-      navigate("/login");
+      navigate("/");
     } else {
       fetchSkills();
       fetchTopSkills();

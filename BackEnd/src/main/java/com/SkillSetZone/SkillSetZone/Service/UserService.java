@@ -2,11 +2,13 @@ package com.SkillSetZone.SkillSetZone.Service;
 
 import com.SkillSetZone.SkillSetZone.DTO.LoginRequest;
 import com.SkillSetZone.SkillSetZone.Entity.User;
+import com.SkillSetZone.SkillSetZone.Repo.ExprRepository;
 import com.SkillSetZone.SkillSetZone.Repo.SkillRepository;
 import com.SkillSetZone.SkillSetZone.Repo.UserRepository;
 import com.SkillSetZone.SkillSetZone.controller.AuthenticationFailedException;
 import com.SkillSetZone.SkillSetZone.controller.EmailAlreadyInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,11 +29,14 @@ public class UserService {
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final UserRepository userRepository;
     private final SkillRepository skillRepository;
+    private final ExprRepository exprRepository;
+
 
     @Autowired
-    public UserService(UserRepository userRepository, SkillRepository skillRepository) {
+    public UserService(UserRepository userRepository, SkillRepository skillRepository, ExprRepository exprRepository) {
         this.userRepository = userRepository;
         this.skillRepository = skillRepository;
+        this.exprRepository = exprRepository;
     }
 
     public User createUser(User user) {
@@ -128,4 +133,12 @@ public class UserService {
     }
 
 
+    public User deleteUserById(String id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User with ID " + id + " not found"));
+        String email = user.getEmail();
+        skillRepository.deleteSkillByEmail(email);
+        exprRepository.deleteExprByEmail(email);
+        userRepository.delete(user);
+        return user;
+    }
 }

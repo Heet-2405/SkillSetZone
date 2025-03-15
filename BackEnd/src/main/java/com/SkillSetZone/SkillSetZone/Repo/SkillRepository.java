@@ -13,6 +13,7 @@ public interface SkillRepository extends MongoRepository<Skill, String> {
     List<Skill>findByTitleContainingIgnoreCase(String title);
     List<Skill> findByToolContainingIgnoreCase(String tool);
 
+    void deleteSkillByEmail(String email);
 }
 
 

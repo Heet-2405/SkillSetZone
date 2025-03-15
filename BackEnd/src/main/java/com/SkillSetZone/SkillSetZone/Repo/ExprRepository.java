@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ExprRepository extends MongoRepository<Expr, String> {
     List<Expr> findAllByEmail(String email);
+
+    void deleteExprByEmail(String email);
 }
