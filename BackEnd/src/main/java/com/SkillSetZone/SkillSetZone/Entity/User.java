@@ -44,6 +44,15 @@ public class User {
         this.skills = skills == null ? new ArrayList<>() : skills;
         this.bio = bio;
     }
+    private String role = "USER"; // Default role
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     // Getters and Setters
     public String getId() { return id; }

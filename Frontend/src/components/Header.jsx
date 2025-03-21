@@ -94,8 +94,11 @@ const Header = () => {
         <nav className="nav">
           {isAuthenticated ? (
             isAdmin ? (
-              // Admin navigation - only show logout button
-              <button className="button" onClick={handleLogout}>Logout</button>
+              // Admin navigation - show Admin label and logout button
+              <>
+                <button className="button admin-button" onClick={() => navigate("/admin")}>Admin</button>
+                <button className="button" onClick={handleLogout}>Logout</button>
+              </>
             ) : (
               // Regular user navigation - show all buttons
               <>
