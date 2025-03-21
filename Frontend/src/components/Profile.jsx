@@ -321,61 +321,59 @@ function Profile() {
         {/* Right side - Content (70%) */}
         <div className="content-main">
           {/* Skills Section */}
-          <div className="section-container">
-            <div className="section-header">
+          <div className="profile-skills-section">
+            <div className="profile-skills-header">
               <h2>Skills</h2>
-              <button className="add-btn" onClick={navigateToAddSkill}>
+              <button className="profile-add-skill-btn" onClick={navigateToAddSkill}>
                 Add Skill
               </button>
             </div>
 
             {/* Skills List */}
             {skills.length > 0 ? (
-              <div className="items-list">
+              <div className="profile-skills-grid">
                 {skills.map((skill) => (
-                  <div key={skill.id} className="item-card">
-                    <div className="item-header">
-                      <h4>{skill.title}</h4>
-                      {skill.tool && <span className="item-tag">{skill.tool}</span>}
+                  <div key={skill.id} className="profile-skill-card">
+                    <div className="profile-skill-header">
+                      <h3 className="profile-skill-title">{skill.title}</h3>
+                      {skill.tool && <span className="profile-skill-tool">{skill.tool}</span>}
                     </div>
                     
-                    <div className="item-content">
-                      <div className="item-description">
-                        <p>{processTextWithLinks(skill.description)}</p>
-                      </div>
+                    <div className="profile-skill-content">
+                      <p className="profile-skill-description">
+                        {processTextWithLinks(skill.description)}
+                      </p>
                       
                       {skill.image && (
-                        <div className="item-image-container">
-                          <img
-                            src={`data:image/jpeg;base64,${skill.image}`}
-                            alt={skill.title}
-                            className="item-image"
-                          />
-                        </div>
+                        <img
+                          src={`data:image/jpeg;base64,${skill.image}`}
+                          alt={skill.title}
+                          className="profile-skill-image"
+                        />
                       )}
                     </div>
-                    
-                    <div className="item-actions">
-                      <button 
-                        className="update-btn"
-                        onClick={() => navigateToUpdateSkill(skill.id)}
-                      >
-                        Update
-                      </button>
-                      <button 
-                        className="delete-btn"
-                        onClick={() => handleDeleteSkill(skill.id)}
-                      >
-                        Delete
-                      </button>
+
+                    <div className="profile-skill-footer">
+                      <div className="profile-skill-actions">
+                        <button 
+                          className="profile-edit-button"
+                          onClick={() => navigateToUpdateSkill(skill.id)}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="profile-delete-button"
+                          onClick={() => handleDeleteSkill(skill.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="no-items">
-                <p>No skills added yet. Add your first skill!</p>
-              </div>
+              <p className="profile-empty-message">No skills added yet.</p>
             )}
           </div>
 

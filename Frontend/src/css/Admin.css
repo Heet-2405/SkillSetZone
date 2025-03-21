@@ -314,22 +314,24 @@ button {
 
 /* Users Management */
 .search-container {
-  display: flex;
-  gap: 10px;
   margin-bottom: 20px;
-  align-items: center;
-  background-color: var(--background-light);
-  padding: 12px 16px;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 500px;
 }
 
 .search-input {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  font-size: 14px;
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .search-category {

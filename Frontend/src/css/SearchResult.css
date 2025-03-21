@@ -1,6 +1,7 @@
 Updated SearchResult.css
 
 :root {
+  /* Colors */
   --primary-color: #007bff;
   --background-color: #f8f9fa;
   --card-background: #ffffff;
@@ -10,6 +11,22 @@ Updated SearchResult.css
   --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   --border-radius: 10px;
   --transition: all 0.2s ease-in-out;
+
+  /* Typography */
+  --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 28px;
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 }
 
 .search-results {
@@ -20,11 +37,13 @@ Updated SearchResult.css
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
   text-align: center;
+  font-family: var(--font-family);
 }
 
 h2 {
   color: var(--text-color);
-  font-size: 24px;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
   margin-bottom: 20px;
 }
 
@@ -36,7 +55,7 @@ h2 {
 
 .skill-card {
   background: var(--card-background);
-  padding: 15px;
+  padding: 20px;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
   text-align: left;
@@ -44,69 +63,89 @@ h2 {
 }
 
 .skill-card:hover {
-  transform: scale(1.02);
+  transform: translateY(-3px);
 }
 
-/* Updated user info styles for better alignment */
-.user-info-container {
+.user-info {
   display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  margin-bottom: 15px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .user-profile-image {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
-  flex-shrink: 0;
+  border: 2px solid var(--primary-color);
 }
 
-.user-details {
+.user-text {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
 }
 
 .user-name {
-  margin: 0 0 5px 0;
-  font-size: 18px;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-color);
-  line-height: 1.2;
+  margin: 0;
 }
 
 .user-email {
-  margin: 0;
+  font-size: var(--font-size-sm);
   color: var(--text-muted);
-  font-size: 14px;
-  line-height: 1.2;
+  margin: 0;
+  display: block;
 }
 
 .skill-title {
-  color: var(--primary-color);
-  margin: 10px 0 5px 0;
-  font-size: 20px;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+  margin: 15px 0 10px 0;
+}
+
+.skill-header-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  gap: 10px;
 }
 
 .skill-tool {
-  font-size: 16px;
-  color: var(--text-muted);
-  margin: 5px 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--primary-color);
+  background-color: #eef3ff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .skill-likes {
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--text-color);
-  margin: 10px 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.skill-likes i {
+  color: #ff4757;
+  font-size: var(--font-size-base);
 }
 
 .skill-description {
+  font-size: var(--font-size-base);
+  color: var(--text-muted);
+  line-height: 1.6;
   margin: 15px 0;
-  color: var(--text-color);
-  line-height: 1.5;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
 }
 
 .skill-image {
@@ -114,25 +153,73 @@ h2 {
   max-height: 250px;
   object-fit: cover;
   border-radius: var(--border-radius);
-  margin-top: 10px;
+  margin: 15px 0;
+  transition: opacity 0.3s ease;
 }
 
 .show-more-btn {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 15px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: 8px 24px;
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius);
   cursor: pointer;
-  margin-top: 10px;
-  transition: var(--transition);
+  transition: all 0.3s ease;
+  display: block;
+  margin: 15px 0 0 0;
+  width: 100%;
 }
 
 .show-more-btn:hover {
-  opacity: 0.9;
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Add spacing after the skill tool when content is not expanded */
+.skill-tool + .show-more-btn {
+  margin-top: 15px;
 }
 
 .detected-link {
   color: var(--primary-color);
-  text-decoration: underline;
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+/* Remove unused styles */
+.user-info-container,
+.user-details {
+  display: none;
+}
+
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-header h2 {
+  margin: 0;
+}
+
+.sort-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  background-color: var(--card-background);
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.sort-info i {
+  color: var(--primary-color);
+  font-size: var(--font-size-base);
 }

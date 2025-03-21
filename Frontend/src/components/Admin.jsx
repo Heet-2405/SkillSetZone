@@ -16,6 +16,7 @@ const Admin = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchCategory, setSearchCategory] = useState('skill'); // 'skill' or 'tool'
+  const [skillSearchTerm, setSkillSearchTerm] = useState(''); // New state for skills search
   const [expandedSkills, setExpandedSkills] = useState({});
   const [expandedTools, setExpandedTools] = useState({});
   const navigate = useNavigate();
@@ -38,6 +39,13 @@ const Admin = () => {
       filterUsers();
     }
   }, [searchTerm, searchCategory, users, activeTab]);
+
+  // Effect to filter skills when search term changes
+  useEffect(() => {
+    if (activeTab === 'skills' && skills.length > 0) {
+      filterSkills();
+    }
+  }, [skillSearchTerm, skills, activeTab]);
 
   const filterUsers = () => {
     if (!searchTerm.trim()) {
@@ -86,6 +94,18 @@ const Admin = () => {
     });
   
     setFilteredUsers(filtered);
+  };
+
+  const filterSkills = () => {
+    if (!skillSearchTerm.trim()) {
+      return skills;
+    }
+    
+    const lowercaseSearchTerm = skillSearchTerm.toLowerCase().trim();
+    return skills.filter(skill => 
+      skill.name.toLowerCase().includes(lowercaseSearchTerm) ||
+      skill.description.toLowerCase().includes(lowercaseSearchTerm)
+    );
   };
 
   const fetchData = async () => {
@@ -427,13 +447,23 @@ const Admin = () => {
         </button>
       </div>
       
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search skills..."
+          value={skillSearchTerm}
+          onChange={(e) => setSkillSearchTerm(e.target.value)}
+          className="search-input"
+        />
+      </div>
+      
       <div className="skills-list">
         <h4>Current Top Skills:</h4>
         {skills.length === 0 ? (
           <p>No skills added yet.</p>
         ) : (
           <ul className="admin-skills-list">
-            {skills.map((skill, index) => (
+            {filterSkills().map((skill, index) => (
               <li key={index} className="admin-skill-item">
                 {editSkillIndex === index ? (
                   <div className="edit-skill-form">
@@ -483,26 +513,7 @@ const Admin = () => {
     <div className="admin-card">
       <h3>Manage Users</h3>
       
-      <div className="search-section">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder={`Search users by ${searchCategory}...`}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyPress={handleSearchKeyPress}
-            className="search-input"
-          />
-          <select 
-            value={searchCategory}
-            onChange={(e) => setSearchCategory(e.target.value)}
-            className="search-category"
-          >
-            <option value="skill">Search by Skill</option>
-            <option value="tool">Search by Tool</option>
-          </select>
-        </div>
-      </div>
+      
       
       <div className="users-section">
         <div className="users-list">

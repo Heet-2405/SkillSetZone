@@ -54,51 +54,67 @@ const SearchResults = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [skills, setSkills] = useState([]);
-  const [expandedSkill, setExpandedSkill] = useState(null); // Track expanded skill
+  const [expandedSkills, setExpandedSkills] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sortByLikes, setSortByLikes] = useState(true); // Default to sort by likes
 
   const queryParams = new URLSearchParams(location.search);
-  const searchQuery = queryParams.get("query"); // Get 'query' parameter from the URL
-  const authToken = localStorage.getItem("auth"); // Retrieve auth from localStorage
+  const searchQuery = queryParams.get("query");
+  const authToken = localStorage.getItem("auth");
+
+  const toggleSkill = (skillId) => {
+    setExpandedSkills(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(skillId)) {
+        newSet.delete(skillId);
+      } else {
+        newSet.add(skillId);
+      }
+      return newSet;
+    });
+  };
+
+  const sortSkills = (skillsToSort) => {
+    return [...skillsToSort].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+  };
 
   useEffect(() => {
     if (!authToken) {
-      navigate("/login"); // Redirect to login if not authenticated
+      navigate("/login");
     } else if (searchQuery) {
       setLoading(true);
-      axios
-        .get(`http://localhost:8080/api/skills/search?query=${encodeURIComponent(searchQuery)}`, {
-          headers: {
-            Authorization: `Basic ${authToken}`, // Include auth token
-          },
-        })
-        .then((response) => {
-          console.log("API response:", response);
+      
+      const endpoint = `http://localhost:8080/api/skills/search?query=${encodeURIComponent(searchQuery)}`;
 
+      let headers = {};
+      
+      if (authToken === "admin") {
+        const encodedCredentials = btoa("admin:admin");
+        headers = { Authorization: `Basic ${encodedCredentials}` };
+      } else {
+        headers = { Authorization: `Basic ${authToken}` };
+      }
+
+      axios
+        .get(endpoint, { headers })
+        .then((response) => {
           const skillsWithImages = response.data.map((skill) => ({
             ...skill,
             profileImage: skill.profileImage
               ? `data:image/jpeg;base64,${skill.profileImage}`
               : defaultProfileImage,
             imageSrc: skill.image ? `data:image/jpeg;base64,${skill.image}` : null,
-            createdAt: new Date(parseInt(skill.id.substring(0, 8), 16) * 1000),
           }));
 
-          // Sort by likes (descending order). If likes are equal, sort by createdAt (newest first)
-          const sortedSkills = skillsWithImages.sort((a, b) => {
-            if (b.likes !== a.likes) {
-              return b.likes - a.likes; // Higher likes first
-            }
-            return b.createdAt - a.createdAt; // If likes are equal, newest first
-          });
-
+          // Sort skills by likes in descending order
+          const sortedSkills = sortSkills(skillsWithImages);
           setSkills(sortedSkills);
           setLoading(false);
         })
         .catch((err) => {
           console.error("Error fetching search results:", err);
-          setError("Error fetching search results");
+          setError("Error fetching search results. Please try again.");
           setLoading(false);
         });
     }
@@ -106,39 +122,70 @@ const SearchResults = () => {
 
   return (
     <div className="search-results">
-      <h2>Search Results for "{searchQuery}"</h2>
+      <div className="search-header">
+        <h2>Search Results for &quot;{searchQuery}&quot;</h2>
+        <div className="sort-info">
+          <i className="fas fa-sort-amount-down"></i>
+          <span>Sorted by most likes</span>
+        </div>
+      </div>
 
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
 
       {skills.length === 0 && !loading ? (
-        <p>No skills found for "{searchQuery}".</p>
+        <p>No skills found for &quot;{searchQuery}&quot;.</p>
       ) : (
         <div className="skills-list">
           {skills.map((skill) => (
-            <div key={skill.id} className="skill-card">
-              <div className="user-info-container">
-                <img src={skill.profileImage} alt="User Profile" className="user-profile-image" />
-                <div className="user-details">
-                  <h2 className="user-name">{skill.username}</h2>
-                  <p className="user-email">{skill.email}</p>
+            <div className="skill-card" key={skill.id}>
+              <div className="user-info">
+                <img 
+                  src={skill.profileImage || defaultProfileImage} 
+                  alt={`${skill.username}'s profile`} 
+                  className="user-profile-image"
+                />
+                <div className="user-text">
+                  <h3 className="user-name">{skill.username}</h3>
+                  <span className="user-email">{skill.email}</span>
                 </div>
               </div>
-              <h3 className="skill-title">{skill.title}</h3>
-              {skill.tool ? <h4 className="skill-tool">Tool: {skill.tool}</h4> : null}
-              <h3 className="skill-likes">Likes: {skill.likes}</h3>
-
-              {/* Show More / Show Less functionality */}
-              {expandedSkill === skill.id ? (
+              
+              <h4 className="skill-title">{skill.title}</h4>
+              <div className="skill-header-info">
+                {skill.tool && <span className="skill-tool">{skill.tool}</span>}
+                <span className="skill-likes">
+                  <i className="fas fa-heart"></i>Likes :{skill.likes || 0}
+                </span>
+              </div>
+              
+              {expandedSkills.has(skill.id) ? (
                 <>
-                  <div className="skill-description">
+                  <p className="skill-description">
                     <LinkifyText text={skill.description} />
-                  </div>
-                  {skill.imageSrc && <img src={skill.imageSrc} alt={skill.title} className="skill-image" />}
-                  <button onClick={() => setExpandedSkill(null)} className="show-more-btn">Show Less</button>
+                  </p>
+                  
+                  {skill.image && (
+                    <img
+                      src={`data:image/jpeg;base64,${skill.image}`}
+                      alt={skill.title}
+                      className="skill-image"
+                    />
+                  )}
+                  <button 
+                    className="show-more-btn"
+                    onClick={() => toggleSkill(skill.id)}
+                  >
+                    Show Less
+                  </button>
                 </>
               ) : (
-                <button onClick={() => setExpandedSkill(skill.id)} className="show-more-btn">Show More</button>
+                <button 
+                  className="show-more-btn"
+                  onClick={() => toggleSkill(skill.id)}
+                >
+                  Show More
+                </button>
               )}
             </div>
           ))}
