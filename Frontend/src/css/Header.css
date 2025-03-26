@@ -1,3 +1,4 @@
+/* Header.css */
 :root {
   --primary-color: #4a6bff;
   --primary-dark: #3a56d4;
@@ -10,6 +11,8 @@
   --gray: #adb5bd;
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
+  --admin-color: #ff9800;
+  --admin-dark: #e68a00;
 }
 
 .header {
@@ -22,6 +25,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  width: 100%;
 }
 
 .logo-container {
@@ -90,19 +94,85 @@
   white-space: nowrap;
 }
 
-/* Username styling */
-.username-display {
-  margin-right: auto;
-  padding-right: 1rem;
+/* Profile image styling */
+.profile-container {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
 }
 
-.username-display h3 {
-  margin: 0;
-  font-size: 1rem;
+.profile-image-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.profile-image-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.profile-image-wrapper.admin {
+  background-color: var(--admin-color);
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-initials {
+  color: var(--white);
   font-weight: 600;
-  color: var(--text-color);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
+.profile-initials.admin {
+  background-color: var(--admin-color);
+}
+
+.admin-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background-color: var(--admin-color);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.user-icon {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.admin-profile {
+  margin-right: 0.5rem;
+}
+
+/* Button styling */
 .button {
   padding: 0.6rem 1.2rem;
   border: none;
@@ -138,28 +208,45 @@
   background-color: #e55c5c;
 }
 
+.admin-button {
+  background-color: var(--admin-color) !important;
+}
+
+.admin-button:hover {
+  background-color: var(--admin-dark) !important;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1100px) {
   .header {
     padding: 1rem;
   }
-  
+
+  .logo {
+    font-size: 1.6rem;
+  }
+
   .button {
     padding: 0.6rem 0.8rem;
     font-size: 0.9rem;
+  }
+  
+  .search-container {
+    max-width: 400px;
   }
 }
 
 @media (max-width: 900px) {
   .header {
     flex-wrap: wrap;
+    padding: 0.8rem;
   }
-  
+
   .logo-container {
     flex: 1;
     margin-bottom: 0.5rem;
   }
-  
+
   .search-container {
     order: 3;
     flex: 1 0 100%;
@@ -167,27 +254,127 @@
     max-width: 100%;
   }
   
+  .search-input {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .search-container .button {
+    padding: 0.6rem 1rem;
+  }
+
   .nav {
     flex: 0 0 auto;
     margin-bottom: 0.5rem;
   }
 }
 
+@media (max-width: 768px) {
+  .header {
+    padding: 0.8rem;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+  }
+  
+  .profile-image-wrapper {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .button {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+  }
+}
+
 @media (max-width: 600px) {
+  .header {
+    padding: 0.7rem;
+  }
+  
   .nav {
     overflow-x: auto;
     padding-bottom: 5px;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+    gap: 0.5rem;
+    margin-left: -0.5rem; /* Offset the first item's left margin */
   }
-  
+
   .nav::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
   }
-  
+
   .button {
     flex-shrink: 0;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.8rem;
   }
   
+  .search-input {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.9rem;
+  }
+  
+  .search-container .button {
+    padding: 0.5rem 0.8rem;
+  }
+}
 
+@media (max-width: 480px) {
+  .header {
+    padding: 0.6rem;
+  }
+  
+  .logo {
+    font-size: 1.3rem;
+  }
+  
+  .profile-image-wrapper {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .admin-badge {
+    width: 15px;
+    height: 15px;
+  }
+  
+  .profile-initials {
+    font-size: 0.8rem;
+  }
+  
+  .search-input {
+    border-radius: 20px 0 0 20px;
+  }
+  
+  .search-container .button {
+    border-radius: 0 20px 20px 0;
+  }
+  
+  .button {
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .logo-container, .nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .logo {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .profile-container {
+    margin-right: 0;
+  }
 }

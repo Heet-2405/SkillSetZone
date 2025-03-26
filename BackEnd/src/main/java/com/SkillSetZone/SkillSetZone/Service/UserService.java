@@ -38,9 +38,9 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new EmailAlreadyInUseException("Email is already in use.");
         }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        System.out.println(user.getPassword());
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        System.out.println(user.getPassword());
         // Image is optional, if null, do nothing
         if (user.getImage() == null) {
             user.setImage(null);
@@ -52,7 +52,7 @@ public class UserService {
     public User authenticateUser(LoginRequest loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new AuthenticationFailedException("Invalid email or password"));
-
+        System.out.println(user);
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new AuthenticationFailedException("Invalid email or password");
         }

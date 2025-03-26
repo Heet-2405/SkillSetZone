@@ -4,6 +4,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,27 +15,29 @@ public class User {
 
     @Id
     private String id;
+
+    @NotBlank(message = "Name is required")
     private String name;
+
+    @NotBlank(message = "Email is required")
+//    @Pattern(regexp = "^\\d{2}[a-z]{2,5}[a-z]{2}\\d{3}@ddu\\.ac\\.in$",
+//            message = "Email must be in the format like '22itubs029@ddu.ac.in")
     private String email;
+
+    @NotBlank(message = "Password is required")
     private String password;
+
     private String collegeBranch;
     private String bio;
-
-
-
     private byte[] image; // Optional field
+
     @DBRef
     private List<Skill> skills = new ArrayList<>();
 
+    private String role = "USER"; // Default role
+
+    // Constructors and other methods remain the same
     public User() {}
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
 
     public User(String id, String name, String email, String password, String collegeBranch, byte[] image, List<Skill> skills, String bio) {
         this.id = id;
@@ -44,7 +49,15 @@ public class User {
         this.skills = skills == null ? new ArrayList<>() : skills;
         this.bio = bio;
     }
-    private String role = "USER"; // Default role
+
+    // All getters and setters remain the same
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 
     public String getRole() {
         return role;

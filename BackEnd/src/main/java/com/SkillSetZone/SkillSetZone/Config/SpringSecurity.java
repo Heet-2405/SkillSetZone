@@ -85,6 +85,7 @@ public class SpringSecurity {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(Arrays.asList("https://vpmznt8j-5174.inc1.devtunnels.ms/"));// Frontend URL
         corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Frontend URL
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods
         corsConfig.setAllowedHeaders(Arrays.asList("*")); // Allow all headers

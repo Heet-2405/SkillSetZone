@@ -5,6 +5,7 @@ import com.SkillSetZone.SkillSetZone.DTO.LoginRequest;
 import com.SkillSetZone.SkillSetZone.Entity.User;
 import com.SkillSetZone.SkillSetZone.Repo.UserRepository;
 import com.SkillSetZone.SkillSetZone.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173/")
@@ -33,7 +36,7 @@ public class PublicController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Signup endpoint
+//     Signup endpoint
     @PostMapping("/signup")
     public ResponseEntity<?> signup(
             @RequestParam("name") String name,
@@ -67,6 +70,8 @@ public class PublicController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing image");
         }
     }
+
+
 
     // Login endpoint
     @PostMapping("/login")

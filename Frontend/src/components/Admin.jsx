@@ -13,12 +13,12 @@ const Admin = () => {
   const [newSkill, setNewSkill] = useState('');
   const [editSkillIndex, setEditSkillIndex] = useState(null);
   const [editSkillValue, setEditSkillValue] = useState('');
-  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchCategory, setSearchCategory] = useState('skill'); // 'skill' or 'tool'
-  const [skillSearchTerm, setSkillSearchTerm] = useState(''); // New state for skills search
+  const [searchCategory, setSearchCategory] = useState('skill');
+  const [skillSearchTerm, setSkillSearchTerm] = useState('');
   const [expandedSkills, setExpandedSkills] = useState({});
   const [expandedTools, setExpandedTools] = useState({});
+  const [expandedSkillDetails, setExpandedSkillDetails] = useState({});
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -116,30 +116,17 @@ const Admin = () => {
       } else if (activeTab === 'users') {
         await fetchAllUsers();
       }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setError('Failed to fetch data. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   const fetchTopSkills = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/admin/skill/all');
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
+    const response = await fetch('http://localhost:8080/admin/skill/all');
+    if (response.ok) {
       const data = await response.json();
       setSkills(data.map(skill => skill.skillName));
-      setError(null);
-    } catch (error) {
-      console.error('Error fetching top skills:', error);
-      setError('Failed to fetch skills. Using default skills instead.');
-      
-      // Fallback to default skills if API fails
+    } else {
       const defaultSkills = [
         "Video Editing",
         "Image Editing",
@@ -153,29 +140,20 @@ const Admin = () => {
   };
 
   const fetchAllUsers = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/admin/all-users');
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
+    const response = await fetch('http://localhost:8080/admin/all-users');
+    if (response.ok) {
       const data = await response.json();
       setUsers(data);
-      setFilteredUsers(data); // Initialize filtered users with all users
-      setError(null);
-    } catch (error) {
-      console.error('Error fetching all users:', error);
-      setError('Failed to fetch users. Please try again.');
+      setFilteredUsers(data);
+    } else {
       setUsers([]);
       setFilteredUsers([]);
     }
   };
 
-
-
   const fetchUserDetails = async (userName) => {
     try {
+      console.log('Fetching details for user:', userName); // Debugging log
       setSelectedUser(userName);
       const response = await fetch(`http://localhost:8080/admin/userProfile/${userName}`);
       
@@ -186,21 +164,20 @@ const Admin = () => {
       const data = await response.json();
       
       // Ensure the data is properly structured
-      setUserDetails({
+      const formattedData = {
         ...data,
         skill: Array.isArray(data.skill) ? data.skill : [],
         tools: Array.isArray(data.tools) ? data.tools : []
-      });
+      };
+      setUserDetails(formattedData);
+      console.log('Fetched user details:', formattedData); // Debugging log
       
       // Reset expanded states when a new user is selected
       setExpandedSkills({});
       setExpandedTools({});
       
-      setError(null);
     } catch (error) {
       console.error('Error fetching user details:', error);
-      setError('Failed to fetch user details. Please try again.');
-      setUserDetails(null);
     }
   };
 
@@ -223,7 +200,6 @@ const Admin = () => {
       
       // Refresh users list
       await fetchAllUsers();
-      setError(null);
       
       // Clear user details if the deleted user was selected
       if (userDetails && userDetails.id === userId) {
@@ -235,7 +211,6 @@ const Admin = () => {
       alert(`User "${userName}" has been successfully deleted.`);
     } catch (error) {
       console.error('Error deleting user:', error);
-      setError('Failed to delete user. Please try again.');
       alert('Failed to delete user. Please try again.');
     }
   };
@@ -249,7 +224,6 @@ const Admin = () => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    setError(null);
     setSearchTerm(''); // Reset search when changing tabs
     
     if (tab === 'skills') {
@@ -263,7 +237,6 @@ const Admin = () => {
     if (newSkill.trim() === '') return;
     
     try {
-      setError(null);
       const formData = new FormData();
       formData.append('skillName', newSkill.trim());
       
@@ -284,7 +257,6 @@ const Admin = () => {
       alert(`Skill "${newSkill.trim()}" has been successfully added.`);
     } catch (error) {
       console.error('Error adding skill:', error);
-      setError('Failed to add skill. Please try again.');
       alert('Failed to add skill. Please try again.');
     }
   };
@@ -298,7 +270,6 @@ const Admin = () => {
     }
     
     try {
-      setError(null);
       const response = await fetch(`http://localhost:8080/admin/skill/delete?skillName=${encodeURIComponent(skillName)}`, {
         method: 'DELETE',
       });
@@ -314,7 +285,6 @@ const Admin = () => {
       alert(`Skill "${skillName}" has been successfully deleted.`);
     } catch (error) {
       console.error('Error deleting skill:', error);
-      setError('Failed to delete skill. Please try again.');
       alert('Failed to delete skill. Please try again.');
     }
   };
@@ -331,7 +301,6 @@ const Admin = () => {
     }
     
     try {
-      setError(null);
       const oldSkill = skills[editSkillIndex];
       
       // Confirm before updating
@@ -373,7 +342,6 @@ const Admin = () => {
       alert(`Skill successfully updated from "${oldSkill}" to "${editSkillValue.trim()}".`);
     } catch (error) {
       console.error('Error updating skill:', error);
-      setError('Failed to update skill. Please try again.');
       alert('Failed to update skill. Please try again.');
     }
   };
@@ -417,6 +385,13 @@ const Admin = () => {
     }));
   };
 
+  const toggleSkillDetails = (skillId) => {
+    setExpandedSkillDetails(prev => ({
+      ...prev,
+      [skillId]: !prev[skillId]
+    }));
+  };
+
   const renderLoadingIndicator = () => (
     <div className="loading-container">
       <div className="loading-spinner"></div>
@@ -447,15 +422,7 @@ const Admin = () => {
         </button>
       </div>
       
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search skills..."
-          value={skillSearchTerm}
-          onChange={(e) => setSkillSearchTerm(e.target.value)}
-          className="search-input"
-        />
-      </div>
+    
       
       <div className="skills-list">
         <h4>Current Top Skills:</h4>
@@ -509,169 +476,115 @@ const Admin = () => {
     </div>
   );
 
-  const renderUsersManagement = () => (
-    <div className="admin-card">
-      <h3>Manage Users</h3>
-      
-      
-      
-      <div className="users-section">
-        <div className="users-list">
-          <h4>All Users</h4>
-          {filteredUsers.length === 0 ? (
-            <p>{searchTerm ? "No users found matching your search." : "No users found."}</p>
-          ) : (
-            <table className="users-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map((user) => (
-                  <tr key={user.id} className={selectedUser === user.name ? 'selected-row' : ''}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td className="user-actions">
-                      <button 
-                        onClick={() => fetchUserDetails(user.name)}
-                        className="view-button"
-                      >
-                        View
-                      </button>
-                      <button 
-                        onClick={() => handleDeleteUser(user.id, user.name)}
-                        className="delete-button"
-                      >
-                        Delete
-                      </button>
-                    </td>
+  const renderUsersManagement = () => {
+    console.log('Rendering user details:', userDetails); // Debugging log
+    return (
+      <div className="admin-card">
+        <h3>Manage Users</h3>
+        
+        <div className="users-section">
+          <div className="users-list">
+            <h4>All Users</h4>
+            {filteredUsers.length === 0 ? (
+              <p>{searchTerm ? "No users found matching your search." : "No users found."}</p>
+            ) : (
+              <table className="users-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredUsers.map((user) => (
+                    <tr key={user.id} className={selectedUser === user.name ? 'selected-row' : ''}>
+                      <td>{user.name}</td>
+                      <td>{user.email}</td>
+                      <td className="user-actions">
+                        <button 
+                          onClick={() => fetchUserDetails(user.name)}
+                          className="view-button"
+                        >
+                          View
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteUser(user.id, user.name)}
+                          className="delete-button"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+          
+          {userDetails && (
+            <div className="user-details">
+              <h4>User Details</h4>
+              <div className="user-info">
+                <p><strong>Name:</strong> {userDetails.name || 'N/A'}</p>
+                <p><strong>Email:</strong> {userDetails.email || 'N/A'}</p>
+                <p><strong>Bio:</strong> {userDetails.bio || 'N/A'}</p>
+                <p><strong>College Branch:</strong> {userDetails.collegeBranch || 'N/A'}</p>
+                
+                {userDetails.skill && userDetails.skill.length > 0 ? (
+                  <div className="user-skills-section">
+                    <h4>Skills & Tools:</h4>
+                    <div className="skills-grid">
+                      {userDetails.skill.map((skill, index) => (
+                        <div key={index} className="skill-card">
+                          <div className="skill-header">
+                            <h5>{skill.title}</h5>
+                            <button
+                              className="show-more-btn"
+                              onClick={() => toggleSkillDetails(index)}
+                            >
+                              {expandedSkillDetails[index] ? 'Show Less' : 'Show More'}
+                            </button>
+                          </div>
+                          
+                          {/* Tools associated with this skill */}
+                          <div className="skill-tools">
+                            <strong>Tools:</strong>
+                            <ul>
+                              {skill.tool && (
+                                <li>{skill.tool}</li>
+                              )}
+                            </ul>
+                          </div>
+                          
+                          {/* Expanded skill details */}
+                          {expandedSkillDetails[index] && (
+                            <div className="skill-details">
+                              <p><strong>Description:</strong></p>
+                              <p>{skill.description || 'No description available.'}</p>
+                              <p><strong>Likes:</strong> {skill.likes || 0}</p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p><strong>Skills & Tools:</strong> None</p>
+                )}
+              </div>
+            </div>
           )}
         </div>
-        
-        {userDetails && (
-          <div className="user-details">
-            <h4>User Details</h4>
-            <div className="user-info">
-              <p><strong>Name:</strong> {userDetails.name}</p>
-              <p><strong>Email:</strong> {userDetails.email}</p>
-              
-              {userDetails.skill && userDetails.skill.length > 0 && (
-                <div className="user-skills">
-                  <p><strong>Skills:</strong></p>
-                  <ul className="expandable-list">
-                    {userDetails.skill.map((skill, index) => {
-                      const skillTitle = typeof skill === 'object' && skill !== null 
-                        ? skill.title
-                        : skill;
-                      
-                      const hasDetails = typeof skill === 'object' && skill !== null && 
-                        (skill.description || skill.image);
-                      
-                      return (
-                        <li key={index} className="expandable-item">
-                          <div className="expandable-header">
-                            <span className="item-title">{skillTitle}</span>
-                            {hasDetails && (
-                              <button 
-                                onClick={() => toggleSkillExpand(index)}
-                                className="expand-button"
-                              >
-                                {expandedSkills[index] ? 'Show Less' : 'Show More'}
-                              </button>
-                            )}
-                          </div>
-                          
-                          {expandedSkills[index] && hasDetails && (
-                            <div className="expanded-content">
-                              {skill.tool && (
-                              <p className="item-description">Tool: {skill.tool}</p>
-                              )}
-                              {skill.description && (
-                                <p className="item-description">{skill.description}</p>
-                              )}
-                              {skill.image && (
-                                <div className="item-image">
-                                  <img src={skill.image} alt={`${skillTitle} visual`} />
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
-              
-              {userDetails.tools && userDetails.tools.length > 0 && (
-                <div className="user-tools">
-                  <p><strong>Tools:</strong></p>
-                  <ul className="expandable-list">
-                    {userDetails.tools.map((tool, index) => {
-                      const toolName = typeof tool === 'object' && tool !== null 
-                        ? tool.name 
-                        : tool;
-                      
-                      const hasDetails = typeof tool === 'object' && tool !== null && 
-                        (tool.description || tool.image);
-                      
-                      return (
-                        <li key={index} className="expandable-item">
-                          <div className="expandable-header">
-                            <span className="item-title">{toolName}</span>
-                            {hasDetails && (
-                              <button 
-                                onClick={() => toggleToolExpand(index)}
-                                className="expand-button"
-                              >
-                                {expandedTools[index] ? 'Show Less' : 'Show More'}
-                              </button>
-                            )}
-                          </div>
-                          
-                          {expandedTools[index] && hasDetails && (
-                            <div className="expanded-content">
-                              {tool.description && (
-                                <p className="item-description">{tool.description}</p>
-                              )}
-                              {tool.image && (
-                                <div className="item-image">
-                                  <img src={tool.image} alt={`${toolName} visual`} />
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="admin-page">
       <div className="admin-header">
         <h2>Admin Dashboard</h2>
       </div>
-      
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
       
       <div className="admin-tabs">
         <button 

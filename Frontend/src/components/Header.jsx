@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "/src/css/Header.css";
+import { Shield, User } from 'lucide-react'; // Import icons for user roles
 
 const Header = () => {
   const location = useLocation();
@@ -8,6 +9,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState(""); // State to track search input
   const [userName, setUserName] = useState(""); // State to store user name
   const [isAdmin, setIsAdmin] = useState(false); // State to check if user is admin
+  const [profileImage, setProfileImage] = useState(null); // State to store profile image
 
   // Pages where specific elements should be hidden (e.g., Signup and Login pages)
   const hideElements = location.pathname === "/signup" || location.pathname === "/";
@@ -33,6 +35,10 @@ const Header = () => {
             const userData = await response.json();
             if (userData && userData.name) {
               setUserName(userData.name);
+              // If the API returns a profile image URL, set it here
+              if (userData.profileImage) {
+                setProfileImage(userData.profileImage);
+              }
             }
           } else {
             console.error("Failed to fetch user profile:", response.status);
@@ -42,6 +48,7 @@ const Header = () => {
         }
       } else {
         setUserName("");
+        setProfileImage(null);
       }
     };
     
@@ -58,6 +65,7 @@ const Header = () => {
     localStorage.removeItem("userRole");
     localStorage.removeItem("email");
     setUserName("");
+    setProfileImage(null);
     navigate("/");
   };
 
@@ -69,10 +77,16 @@ const Header = () => {
     }
   };
 
+  // Generate initials from username for avatar fallback
+  const getInitials = (name) => {
+    if (!name) return "U";
+    return name.split(" ").map(part => part[0]).join("").toUpperCase().substring(0, 2);
+  };
+
   return (
     <header className="header">
       <div className="logo-container">
-        <div className="logo" onClick={() => navigate(isAdmin ? "/admin" : "/")}>SkillSetZone</div>
+        <div className="logo" onClick={() => navigate(isAdmin ? "/admin" : "/dashboard")}>SkillSetZone</div>
       </div>
 
       {/* Search section */}
@@ -96,17 +110,49 @@ const Header = () => {
             isAdmin ? (
               // Admin navigation - show Admin label and logout button
               <>
+                <div className="profile-container admin-profile">
+                  <div className="profile-image-wrapper admin">
+                    {profileImage ? (
+                      <img 
+                        // src={"/placeholder.svg"} 
+                        src={"/download.png"} 
+                        alt="Admin Profile" 
+                        className="profile-image" 
+                      />
+                    ) : (
+                      <div className="profile-initials admin">
+                        {getInitials(userName)}
+                      </div>
+                    )}
+                    <div className="admin-badge">
+                      <Shield size={12} />
+                    </div>
+                  </div>
+                </div>
                 <button className="button admin-button" onClick={() => navigate("/admin")}>Admin</button>
                 <button className="button" onClick={handleLogout}>Logout</button>
               </>
             ) : (
               // Regular user navigation - show all buttons
               <>
-                <div className="username-display">
-                
+                <div className="profile-container">
+                  <div className="profile-image-wrapper">
+                    {profileImage ? (
+                      <img 
+                        // src={"/placeholder.svg"} 
+                        src={"/compponents/download.png"} 
+                        alt="User Profile" 
+                        className="profile-image" 
+                      />
+                    ) : (
+                      <div className="profile-initials">
+                        {getInitials(userName)}
+                        <User size={12} className="user-icon" />
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <button className="button" onClick={() => navigate("/dashboard")}>Dashboard</button>
-                
                 <button className="button" onClick={() => navigate("/profile")}>{userName}</button>
                 <button className="button" onClick={handleLogout}>Logout</button>
               </>
