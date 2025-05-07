@@ -80,11 +80,7 @@ public class SkillController {
     }
 
     private String extractUserEmailFromAuthHeader(String authorizationHeader) {
-        // This function should decode the Basic Auth header and extract the email from it.
-        // The `Authorization` header contains a base64 encoded string "username:password"
-        // You can parse and decode the email from it.
 
-        // Example: "Basic base64encode(username:password)"
         String base64Credentials = authorizationHeader.substring("Basic ".length());
         String credentials = new String(java.util.Base64.getDecoder().decode(base64Credentials));
         return credentials.split(":")[0]; // Assume email is the username

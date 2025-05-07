@@ -48,7 +48,7 @@ const Signup = () => {
         <input type="text" name="name" placeholder="Name" onChange={handleChange} required className="input-field" />
         <input type="email" name="email" placeholder="Email" onChange={handleChange} required className="input-field" />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required className="input-field" />
-        {/* <input type="text" name="collegeBranch" placeholder="College Branch" onChange={handleChange} required className="input-field" /> */}
+        
         <select name="collegeBranch" onChange={handleChange} required className="input-field">
           <option value="">Select College Branch</option>
           <option value="CSE">Computer Science</option>

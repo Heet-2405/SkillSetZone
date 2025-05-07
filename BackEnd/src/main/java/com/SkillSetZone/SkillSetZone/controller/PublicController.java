@@ -45,6 +45,7 @@ public class PublicController {
             @RequestParam("collegeBranch") String collegeBranch,
             @RequestParam(value = "image", required = false) MultipartFile image) {
         try {
+
             // Convert image to byte array (if provided)
             byte[] imageData = null;
             if (image != null && !image.isEmpty()) {

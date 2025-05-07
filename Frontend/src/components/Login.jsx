@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { login } from '/src/services/AuthService.jsx';
 import { useNavigate, Link } from 'react-router-dom';
 import '/src/css/Login.css';  
@@ -8,6 +8,16 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Clear local storage on component mount
+    const token = localStorage.getItem('auth');
+    if (token) {
+      localStorage.removeItem('auth');
+      navigate('/');
+    }
+  }
+, []);
 
   const handleSubmit = async (e) => {
     localStorage.removeItem('auth');

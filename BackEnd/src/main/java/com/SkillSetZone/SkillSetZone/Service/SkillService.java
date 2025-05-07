@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.SkillSetZone.SkillSetZone.Repo.UserLikesSkillRepository;
 import java.io.IOException;
 import java.util.*;
-
+import java.util.stream.Collectors;
 
 
 @Service
@@ -159,16 +159,36 @@ public class SkillService {
     }
 
     public List<Map<String, Object>> searchSkillsByTitleOrTool(String searchQuery) {
-        List<Skill> skills = skillRepository.findByTitleContainingIgnoreCase(searchQuery);
+        List<Skill> allSkills = skillRepository.findAll(); // Fetch all skills once
+        List<Skill> matchedSkills = new ArrayList<>();
 
-        // If no results found, search by tool
-        if (skills.isEmpty()) {
-            skills = skillRepository.findByToolContainingIgnoreCase(searchQuery);
+        // Normalize and split the search query into keywords
+        String[] searchKeywords = searchQuery.toLowerCase().split("\\s+");
+
+        // Match skills by title or tool based on keywords
+        for (Skill skill : allSkills) {
+            String title = skill.getTitle() != null ? skill.getTitle().toLowerCase() : "";
+            String tool = skill.getTool() != null ? skill.getTool().toLowerCase() : "";
+
+            for (String keyword : searchKeywords) {
+                if (title.contains(keyword) || tool.contains(keyword)) {
+                    matchedSkills.add(skill);
+                    break; // No need to check other keywords once matched
+                }
+            }
+        }
+
+        // If still no matches, fallback to search by user name
+        if (matchedSkills.isEmpty()) {
+            List<User> matchingUsers = userRepository.findByNameContainingIgnoreCase(searchQuery);
+            matchedSkills = matchingUsers.stream()
+                    .flatMap(user -> skillRepository.findAllByEmail(user.getEmail()).stream())
+                    .collect(Collectors.toList());
         }
 
         List<Map<String, Object>> response = new ArrayList<>();
 
-        for (Skill skill : skills) {
+        for (Skill skill : matchedSkills) {
             Optional<User> user = userRepository.findByEmail(skill.getEmail());
             String username = user.map(User::getName).orElse("Unknown");
             byte[] profileImage = user.map(User::getImage).orElse(null);
@@ -186,8 +206,10 @@ public class SkillService {
 
             response.add(skillData);
         }
+
         return response;
     }
+
 
 
 

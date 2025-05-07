@@ -110,48 +110,14 @@ const Header = () => {
             isAdmin ? (
               // Admin navigation - show Admin label and logout button
               <>
-                <div className="profile-container admin-profile">
-                  <div className="profile-image-wrapper admin">
-                    {profileImage ? (
-                      <img 
-                        // src={"/placeholder.svg"} 
-                        src={"/download.png"} 
-                        alt="Admin Profile" 
-                        className="profile-image" 
-                      />
-                    ) : (
-                      <div className="profile-initials admin">
-                        {getInitials(userName)}
-                      </div>
-                    )}
-                    <div className="admin-badge">
-                      <Shield size={12} />
-                    </div>
-                  </div>
-                </div>
+                
                 <button className="button admin-button" onClick={() => navigate("/admin")}>Admin</button>
                 <button className="button" onClick={handleLogout}>Logout</button>
               </>
             ) : (
-              // Regular user navigation - show all buttons
+          
               <>
-                <div className="profile-container">
-                  <div className="profile-image-wrapper">
-                    {profileImage ? (
-                      <img 
-                        // src={"/placeholder.svg"} 
-                        src={"/compponents/download.png"} 
-                        alt="User Profile" 
-                        className="profile-image" 
-                      />
-                    ) : (
-                      <div className="profile-initials">
-                        {getInitials(userName)}
-                        <User size={12} className="user-icon" />
-                      </div>
-                    )}
-                  </div>
-                </div>
+                
                 <button className="button" onClick={() => navigate("/dashboard")}>Dashboard</button>
                 <button className="button" onClick={() => navigate("/profile")}>{userName}</button>
                 <button className="button" onClick={handleLogout}>Logout</button>

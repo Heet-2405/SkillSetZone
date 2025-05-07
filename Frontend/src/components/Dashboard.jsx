@@ -135,7 +135,6 @@ const Dashboard = () => {
     setFilteredSkills(skills);
   };
 
-  // Poll for top skills changes every 30 seconds
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetchTopSkills();
@@ -205,7 +204,7 @@ const Dashboard = () => {
                 <div className="dash-likes-row">
                   <p className="dash-likes-count">Likes: {skill.likes}</p>
                   <button className="dash-like-button" onClick={() => toggleLike(skill.id)}>
-                    {skill.hasLiked ? "Like" : "Like"}
+                    {skill.hasLiked ? "👍" : "👍"}
                   </button>
                 </div>
               </div>
@@ -220,3 +219,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+

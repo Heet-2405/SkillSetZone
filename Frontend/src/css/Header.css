@@ -1,33 +1,58 @@
-/* Header.css */
 :root {
+  /* Color Palette */
   --primary-color: #4a6bff;
   --primary-dark: #3a56d4;
   --secondary-color: #ff6b6b;
   --accent-color: #5ce1e6;
+  
+  /* Neutral Colors */
   --text-color: #333333;
-  --light-bg: #f8f9fa;
   --white: #ffffff;
   --gray-light: #e9ecef;
   --gray: #adb5bd;
+  
+  /* Background and Shadow */
+  --light-bg: #f8f9fa;
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
   --transition: all 0.3s ease;
+  
+  /* Admin Colors */
   --admin-color: #ff9800;
   --admin-dark: #e68a00;
 }
 
+/* Reset box-sizing for all elements */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Prevent horizontal overflow */
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Header Layout */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem;
   background-color: var(--white);
   box-shadow: var(--shadow);
   position: sticky;
   top: 0;
   z-index: 1000;
   width: 100%;
+  max-width: 100%;
+  flex-wrap: nowrap;
 }
 
+/* Logo Styling */
 .logo-container {
   flex: 0 0 auto;
   margin-right: 1rem;
@@ -36,7 +61,6 @@
 .logo {
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--primary-color);
   cursor: pointer;
   transition: var(--transition);
   background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
@@ -49,13 +73,14 @@
   transform: scale(1.05);
 }
 
+/* Search Container */
 .search-container {
   flex: 1;
   display: flex;
   justify-content: center;
   margin: 0 1rem;
   max-width: 500px;
-  min-width: 200px;
+  min-width: 100px;
 }
 
 .search-input {
@@ -79,6 +104,7 @@
   color: var(--white);
   border: 2px solid var(--primary-color);
   padding: 0.75rem 1.5rem;
+  white-space: nowrap;
 }
 
 .search-container .button:hover {
@@ -86,6 +112,7 @@
   border-color: var(--primary-dark);
 }
 
+/* Navigation */
 .nav {
   display: flex;
   gap: 0.75rem;
@@ -94,7 +121,7 @@
   white-space: nowrap;
 }
 
-/* Profile image styling */
+/* Profile Image */
 .profile-container {
   display: flex;
   align-items: center;
@@ -172,7 +199,7 @@
   margin-right: 0.5rem;
 }
 
-/* Button styling */
+/* Button Styling */
 .button {
   padding: 0.6rem 1.2rem;
   border: none;
@@ -183,6 +210,7 @@
   transition: var(--transition);
   background-color: var(--gray-light);
   color: var(--text-color);
+  text-align: center;
 }
 
 .button:hover {
@@ -216,10 +244,10 @@
   background-color: var(--admin-dark) !important;
 }
 
-/* Responsive adjustments */
+/* Responsive Adjustments */
 @media (max-width: 1100px) {
   .header {
-    padding: 1rem;
+    padding: 0.8rem;
   }
 
   .logo {
@@ -285,6 +313,7 @@
   .button {
     padding: 0.5rem 0.7rem;
     font-size: 0.85rem;
+    min-width: unset;
   }
 }
 
@@ -296,14 +325,15 @@
   .nav {
     overflow-x: auto;
     padding-bottom: 5px;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     gap: 0.5rem;
-    margin-left: -0.5rem; /* Offset the first item's left margin */
+    margin-left: 0;
+    width: auto;
   }
 
   .nav::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
   }
 
   .button {
@@ -319,6 +349,7 @@
   
   .search-container .button {
     padding: 0.5rem 0.8rem;
+    white-space: nowrap;
   }
 }
 
@@ -359,19 +390,28 @@
 }
 
 @media (max-width: 380px) {
-  .logo-container, .nav {
-    width: 100%;
-    justify-content: space-between;
-  }
-  
   .header {
     flex-direction: column;
     align-items: stretch;
+    padding: 0.6rem;
   }
   
-  .logo {
+  .logo-container {
+    width: 100%;
+    margin-right: 0;
     text-align: center;
     margin-bottom: 0.5rem;
+  }
+  
+  .nav {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  
+  .search-container {
+    margin: 0.5rem 0;
   }
   
   .profile-container {

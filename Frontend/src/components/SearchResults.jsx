@@ -146,6 +146,7 @@ const SearchResults = () => {
                   className="user-profile-image"
                 />
                 <div className="user-text">
+
                   <h3 className="user-name">{skill.username}</h3>
                   <span className="user-email">{skill.email}</span>
                 </div>
@@ -196,3 +197,5 @@ const SearchResults = () => {
 };
 
 export default SearchResults;
+
+
