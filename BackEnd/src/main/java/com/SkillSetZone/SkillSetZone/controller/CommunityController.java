@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/community")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "/**")
 public class CommunityController {
     private static final Logger logger = LoggerFactory.getLogger(CommunityController.class);
 
