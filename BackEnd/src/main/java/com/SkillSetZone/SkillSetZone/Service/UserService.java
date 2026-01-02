@@ -1,6 +1,6 @@
 package com.SkillSetZone.SkillSetZone.Service;
 
-import com.SkillSetZone.SkillSetZone.DTO.LoginRequest;
+import com.SkillSetZone.SkillSetZone.Entity.LoginRequest;
 import com.SkillSetZone.SkillSetZone.Entity.User;
 import com.SkillSetZone.SkillSetZone.Repo.SkillRepository;
 import com.SkillSetZone.SkillSetZone.Repo.UserRepository;
@@ -39,8 +39,6 @@ public class UserService {
             throw new EmailAlreadyInUseException("Email is already in use.");
         }
         System.out.println(user.getPassword());
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        System.out.println(user.getPassword());
         // Image is optional, if null, do nothing
         if (user.getImage() == null) {
             user.setImage(null);

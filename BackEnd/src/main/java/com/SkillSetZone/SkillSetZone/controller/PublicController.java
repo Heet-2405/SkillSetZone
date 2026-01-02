@@ -1,7 +1,7 @@
 package com.SkillSetZone.SkillSetZone.controller;
 
 import com.SkillSetZone.SkillSetZone.DTO.AuthResponse;
-import com.SkillSetZone.SkillSetZone.DTO.LoginRequest;
+import com.SkillSetZone.SkillSetZone.Entity.LoginRequest;
 import com.SkillSetZone.SkillSetZone.Entity.User;
 import com.SkillSetZone.SkillSetZone.Repo.UserRepository;
 import com.SkillSetZone.SkillSetZone.Service.UserService;
