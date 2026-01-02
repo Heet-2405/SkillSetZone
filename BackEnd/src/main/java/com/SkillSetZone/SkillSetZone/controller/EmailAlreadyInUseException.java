@@ -15,7 +15,7 @@ public class EmailAlreadyInUseException extends RuntimeException {
 
     @RestController
     @RequestMapping("/api/communities")
-    @CrossOrigin(origins = "/**")
+    @CrossOrigin(origins = "*")
     public static class CommunityController {
         @Autowired
         private CommunityService communityService;

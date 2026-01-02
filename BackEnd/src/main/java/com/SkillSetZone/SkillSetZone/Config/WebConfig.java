@@ -13,9 +13,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry.addMapping("*")
 
-                .allowedOrigins("/**") // Allow frontend URL
+                .allowedOrigins("*") // Allow frontend URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true);
@@ -34,7 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
         @Override
         public void registerStompEndpoints(StompEndpointRegistry registry) {
             registry.addEndpoint("/ws")
-                    .setAllowedOrigins("/**");
+                    .setAllowedOrigins("*");
         }
     }
 }
